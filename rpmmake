@@ -1,5 +1,5 @@
 #!/bin/sh
-#rpmmake - fast script to create rpm package inside the git repo without beeing root 
+#rpmmake - fast script to create rpm package inside the git repo without being root 
 #author:  Miroslav Safr <miroslav.safr@gmail.com>
 #require <git-name>/<git-name>.spec and tags as x.y.z
 

@@ -2,7 +2,7 @@ name: rpmmake
 version: 1.0.0
 author:  Miroslav Safr <miroslav.safr@gmail.com>
 web: https://github.com/safrm/rpmmake
-description: fast script to create rpm package inside the git repo without beeing root 
+description: fast script to create rpm package inside the git repo without being root 
 
 content: 
  rpmmake  ................ main linux bash script
