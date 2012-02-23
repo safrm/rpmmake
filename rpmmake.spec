@@ -6,6 +6,7 @@ Version:    1.0.0
 Release:    1
 Group:      System/Libraries
 License:    LGPL v2.1
+BuildArch:  noarch
 URL:        https://github.com/safrm/rpmmake
 Source0:    %{name}-%{version}.tar.bz2
 Autoreq: on
