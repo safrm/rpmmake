@@ -1,0 +1,13 @@
+Source: rpmmake
+Section: libs
+Priority: optional
+Maintainer: Miroslav Safr <miroslav.safr@gmail.com>
+Build-Depends: debhelper (>= 5), rpm
+Standards-Version: 1.0.0
+
+Package: rpmmake
+Architecture: all
+Depends: debhelper (>= 5), rpm, tar, ${misc:Depends}, ${launcher:Depends}, ${shlibs:Depends}
+Description: create rpm package inside the git repo without beeing root 
+
+

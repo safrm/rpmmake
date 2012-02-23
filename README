@@ -1,0 +1,15 @@
+name: rpmmake
+version: 1.0.0
+author:  Miroslav Safr <miroslav.safr@gmail.com>
+web: https://github.com/safrm/rpmmake
+description: fast script to create rpm package inside the git repo without beeing root 
+
+content: 
+ rpmmake  ................ main linux bash script
+ install.sh .............. executes installation to /urs/local/bin directory
+
+usage:
+<my-project>$ rpmmake  ......... builds rpms from <my-project>/<my-project>.spec in <my-project>/rpm rootdir
+rpmmake  /<my-path>/<my-project> ......... builds rpms from /<my-path>/<my-project>/<my-project>.spec in /<my-path>/<my-project>/rpm rootdir
+
+
