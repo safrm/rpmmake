@@ -1,15 +1,28 @@
 #!/bin/sh
 #rpmmake - fast script to create rpm package inside the git repo without being root 
-#author:  Miroslav Safr <miroslav.safr@gmail.com>
-#require <git-name>/<git-name>.spec and tags as x.y.z
+#author: Miroslav Safr <miroslav.safr@gmail.com>
+#
+#usage1: <my-project>$ rpmmake  ................... builds rpms from <my-project>/<my-project>.spec in <my-project>/rpm rootdir 
+#                                                   requires <my-project>/<my-project>.spec and tags as x.y.z
+#usage2: rpmmake  /<my-path>/<my-project> ......... builds rpms from /<my-path>/<my-project>/<my-project>.spec in /<my-path>/<my-project>/rpm rootdir
+#usage3: <some-other-name>$ rpmmake -b <my-project> ...... project name is taken from argument <my-project> instead of directory name
+                                                                   
 
-#executing in pwd or pass the directory as 1st parameter
-if [ $# -gt 0 ]; then
-    PWD_DIR=$PWD
-    cd $1
-fi
 
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -b|--basename) shift
+               CUSTOM_BASENAME=$1    #clone directory has different name than project
+               ;;
+	* )        PWD_DIR=$PWD; cd $1   #from different directory
+			   ;; 
+  esac
+  shift
+done
+
+#basename from 
 BASENAME=`basename "$PWD"`
+[ "x$CUSTOM_BASENAME" != "x" ] && BASENAME=$CUSTOM_BASENAME
 if [ ! -f $BASENAME.spec ]
 then
     echo "File $PWD/$BASENAME.spec does not exists" 
