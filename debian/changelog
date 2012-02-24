@@ -1,3 +1,12 @@
+rpmmake (1.0.1-1) unstable; urgency=low
+
+  * Chg: currently we don't need binaries so noarch for rpm
+  * New:spec file exist check
+  * Chg:ubuntu 11.10 source package compatibility
+  * New: Command line argument -b <project-name> which allows the script to be used on Hudson slaves
+
+ -- mirek <miroslav.safr@gmail.com>  Fri, 24 Feb 2012 14:29:50 +0200
+
 rpmmake (1.0.0-1) unstable; urgency=low
 
   * first released version
