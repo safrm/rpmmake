@@ -39,7 +39,7 @@ export INSTALL_ROOT=$RPM_BUILD_ROOT
 # << install pre 
 #make install
 mkdir -p %{buildroot}/usr/bin
-cp ./rpmmake %{buildroot}/usr/bin/
+install -m 755 ./rpmmake %{buildroot}/usr/bin/
 
 # >> install post
 # << install post
