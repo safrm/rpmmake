@@ -17,3 +17,22 @@ usage3:
 <some-other-name>$ rpmmake -b <my-project> ...... project name is taken from argument <my-project> instead of directory name
                                                   this is important for Hudson/Jenkins slaves because they are using own sub-directorical structure
 
+
+install ubuntu:
+  1. add release key
+    wget -O - https://github.com/downloads/safrm/rpmmake/Release.key | sudo apt-key add -
+  2. get package
+    wget https://github.com/downloads/safrm/rpmmake/rpmmake_1.0.2-1_all.deb
+  3.install package
+    sudo dpkg -i ./rpmmake_1.0.2-1_all.deb
+
+install fedora/RHEL:
+  1. add release key
+    wget https://github.com/downloads/safrm/rpmmake/Release.key 
+    sudo rpm --import Release.key 
+    rm Release.key
+  2. get package
+    wget https://github.com/downloads/safrm/rpmmake/rpmmake-1.0.2-1.noarch.rpm
+  3.install package
+    sudo rpm -i ./rpmmake-1.0.2-1.noarch.rpm
+
