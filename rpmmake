@@ -53,8 +53,15 @@ qmake && make distclean
 
 #add rpm exclude
 #for old tar
-#tar --exclude=.gitignore --exclude=.git/* --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* -cvjf rpm/SOURCES/$BASENAME-$VERSION.tar.bz2  ./
-tar --exclude-vcs --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* -cvjf rpm/SOURCES/$BASENAME-$VERSION.tar.bz2  ./
+TAR_MIN_VERSION=`tar --version | head -1 |  awk -F"[ .]" ' { print   $5 }'`
+if [ $TAR_MIN_VERSION -lt 21 ]
+then
+  echo "old tar $TAR_MIN_VERSION "
+  tar --exclude=.gitignore --exclude=.git/* --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* -cvjf rpm/SOURCES/$BASENAME-$VERSION.tar.bz2  ./
+else
+  echo "new tar $TAR_MIN_VERSION "
+  tar --exclude-vcs --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* -cvjf rpm/SOURCES/$BASENAME-$VERSION.tar.bz2  ./
+fi
 echo "tar ball OK"
 
 #rpmbuild ./<git-name>.spec
