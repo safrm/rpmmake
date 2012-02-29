@@ -1,3 +1,8 @@
+rpmmake (1.0.3-1) unstable; urgency=low
+  * New: installation instructions
+  * New: support for old tar < 1.21
+ -- Miroslav Safr <miroslav.safr@gmail.com>  Wed, 29 Feb 2012 15:17:00 +0200
+
 rpmmake (1.0.2-1) unstable; urgency=low
   * Fix: Problem with permissions
  -- Miroslav Safr <miroslav.safr@gmail.com>  Sat, 25 Feb 2012 17:13:47 +0200
