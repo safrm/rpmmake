@@ -8,6 +8,7 @@ Group:      System/Libraries
 License:    LGPL v2.1
 BuildArch:  noarch
 URL:        https://github.com/safrm/rpmmake
+Vendor:     Miroslav Safr <miroslav.safr@gmail.com>
 Source0:    %{name}-%{version}.tar.bz2
 Autoreq: on
 Autoreqprov: on
