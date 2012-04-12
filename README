@@ -5,7 +5,7 @@ description: fast script to create rpm package inside the git repo without being
 
 content: 
  rpmmake  ................ main linux bash script
- install.sh .............. executes installation to /urs/local/bin directory
+ install.sh .............. executes installation to /urs/bin directory
 
 usage1:
 <my-project>$ rpmmake  ................... builds rpms from <my-project>/<my-project>.spec in <my-project>/rpm rootdir
