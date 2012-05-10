@@ -6,14 +6,16 @@
 #                                                   requires <my-project>/<my-project>.spec and tags as x.y.z
 #usage2: rpmmake  /<my-path>/<my-project> ......... builds rpms from /<my-path>/<my-project>/<my-project>.spec in /<my-path>/<my-project>/rpm rootdir
 #usage3: <some-other-name>$ rpmmake -b <my-project> ...... project name is taken from argument <my-project> instead of directory name
-                                                                   
-
+VERSION=NA                                                                   
 
 while [ $# -gt 0 ]; do
   case "$1" in
     -b|--basename) shift
                CUSTOM_BASENAME=$1    #clone directory has different name than project
                ;;
+    --version)    echo "`basename $0` $VERSION"
+                  exit 0
+                  ;;  
 	* )        PWD_DIR=$PWD; cd $1   #from different directory
 			   ;; 
   esac

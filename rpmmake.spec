@@ -41,6 +41,7 @@ export INSTALL_ROOT=$RPM_BUILD_ROOT
 #make install
 mkdir -p %{buildroot}/usr/bin
 install -m 755 ./rpmmake %{buildroot}/usr/bin/
+sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=%{version}/" %{buildroot}/usr/bin/rpmmake && rm -f %{buildroot}/usr/bin/rpmmake.bkp
 
 # >> install post
 # << install post
