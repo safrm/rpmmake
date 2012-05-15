@@ -1,3 +1,10 @@
+rpmmake (1.0.4-1) unstable; urgency=low
+  * New: rpmmake-changelog - automated rpm  changelog generating from git
+  * New: automatic version update to rpm build New: Rootcheck in install.sh     New: integrated appver to automatically update version in text based files New: runtime --version printout
+  * Chg: install.sh default to /usr/bin/
+  * Int: legal stuff
+ -- Miroslav Safr <miroslav.safr@gmail.com>  Tue, 15 Feb 2012 15:17:00 +0200
+
 rpmmake (1.0.3-1) unstable; urgency=low
   * New: installation instructions
   * New: support for old tar < 1.21
