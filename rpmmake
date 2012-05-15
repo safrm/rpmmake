@@ -7,6 +7,19 @@
 #usage2: rpmmake  /<my-path>/<my-project> ......... builds rpms from /<my-path>/<my-project>/<my-project>.spec in /<my-path>/<my-project>/rpm rootdir
 #usage3: <some-other-name>$ rpmmake -b <my-project> ...... project name is taken from argument <my-project> instead of directory name
 VERSION=NA                                                                   
+VERSION_DATE=NA
+
+usage() {
+    echo "usage: `basename $0` [<path_to_project_git_dir>] [-b <basename>] "
+    echo "fast script to create rpm package inside the git repo without being root - https://github.com/safrm/rpmmake"
+    echo ""
+    echo "<path_to_project_git_dir>  path to git directory (empty uses current directory)"
+    echo "args:"
+    echo "  -b | --basename     project name is taken from argument <my-project> instead of directory name"
+    echo "  -h | --help         prints this help"
+    echo ""
+    echo "rpmmake: ${VERSION} ${VERSION_DATE}"
+}
 
 while [ $# -gt 0 ]; do
   case "$1" in
@@ -16,7 +29,10 @@ while [ $# -gt 0 ]; do
     --version)    echo "`basename $0` $VERSION"
                   exit 0
                   ;;  
-	* )        PWD_DIR=$PWD; cd $1   #from different directory
+    -h | --help ) usage 
+		  exit 0
+                  ;;
+	* )       PWD_DIR=$PWD; cd $1   #from different directory
 			   ;; 
   esac
   shift
@@ -46,6 +62,13 @@ mkdir -p rpm/SOURCES rpm/BUILD rpm/SRPMS rpm/RPMS/i386
 #update version in spec from git tag
 #sed -i".bkp" "s/^Version:.*/Version:    ${VERSION}/" ./$BASENAME.spec && rm $BASENAME.spec.bkp
 sed  "s/^Version:.*/Version:    ${VERSION}/" ./$BASENAME.spec > rpm/SOURCES/$BASENAME-$VERSION.spec
+
+#use changelog from edited file
+if [ ! -e ./$BASENAME.changes ]; then
+#or generate changelog automatically 
+  rpmmake-changelog -b $BASENAME 
+fi
+cat ./$BASENAME.changes >> rpm/SOURCES/$BASENAME-$VERSION.spec
 
 #update release no
 #NEW_RELEASE=$[`awk '/Release/ {print $2}' $BASENAME.spec`+1]

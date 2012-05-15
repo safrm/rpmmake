@@ -17,3 +17,5 @@ USERID=`id -u`
 mkdir -p -m 0755 $BINDIR
 install -m 0777 -v ./rpmmake  $BINDIR/
 sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=$APP_FULL_VERSION_TAG/" $BINDIR/rpmmake && rm -f $BINDIR/rpmmake.bkp
+install -m 0777 -v ./rpmmake-changelog  $BINDIR/
+sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=$APP_FULL_VERSION_TAG/" $BINDIR/rpmmake-changelog && rm -f $BINDIR/rpmmake-changelog.bkp

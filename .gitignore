@@ -3,4 +3,4 @@ debian/rpmmake.debhelper.log
 debian/rpmmake.substvars
 debian/rpmmake/*
 rpm/*
-
+*.changes
