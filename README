@@ -18,14 +18,28 @@ rpmmake  /<my-path>/<my-project> ......... builds rpms from /<my-path>/<my-proje
 usage3: 
 <some-other-name>$ rpmmake -b <my-project> ...... project name is taken from argument <my-project> instead of directory name
                                                   this is important for Hudson/Jenkins slaves because they are using own sub-directorical structure
-
+	
 usage4: generate changelogs
 ./rpmmake-changelog 
 first tag: 1.0.4 - e43218284cff9c6c9e69dd17e145805604ecbf66
 rpm changelog for 7 tags updated in ./rpmmake.changes
+
+#check changelog form package
+rpm -qp --changelog ./rpmmake-1.0.5-1.noarch.rpm 
+* Wed May 16 2012 safrrmir-ul000590 <miroslav.safr@gmail.com> - 1.0.5
+- New: changelog scripts added to installation
+- Changes: rpmmake-debchangelog generated right debian/changelog format
+- Fix: rpm changelog tag author New: debian changelog script rpmmake-debchangelog
+- New: Added commits before first tag Changes: default 6 tags, changes file name unified
+....
+
  ./rpmmake-debchangelog 
 first tag: 1.0.4 - e43218284cff9c6c9e69dd17e145805604ecbf66
 debian changelog for 7 tags updated in ./debian/changelog
+
+#check changelog form package
+apt-listchanges ./rpmmake_1.0.5_all.deb
+...
 
 
 install ubuntu:
