@@ -5,6 +5,8 @@ description: fast script to create rpm package inside the git repo without being
 
 content: 
  rpmmake  ................ main linux bash script
+ rpmmake-changelog ....... generates rpm changelog (<my-project>.changes file) from git log
+ rpmmake-debchangelog .... generates debian changelog (debian/changelog file) from git log
  install.sh .............. executes installation to /urs/bin directory
 
 usage1:
@@ -16,6 +18,14 @@ rpmmake  /<my-path>/<my-project> ......... builds rpms from /<my-path>/<my-proje
 usage3: 
 <some-other-name>$ rpmmake -b <my-project> ...... project name is taken from argument <my-project> instead of directory name
                                                   this is important for Hudson/Jenkins slaves because they are using own sub-directorical structure
+
+usage4: generate changelogs
+./rpmmake-changelog 
+first tag: 1.0.4 - e43218284cff9c6c9e69dd17e145805604ecbf66
+rpm changelog for 7 tags updated in ./rpmmake.changes
+ ./rpmmake-debchangelog 
+first tag: 1.0.4 - e43218284cff9c6c9e69dd17e145805604ecbf66
+debian changelog for 7 tags updated in ./debian/changelog
 
 
 install ubuntu:

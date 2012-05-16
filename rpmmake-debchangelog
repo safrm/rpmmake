@@ -103,6 +103,6 @@ fi
 if [ "x$APPEND_LINE" != "x" ]; then
    echo $APPEND_LINE  >> $CHANGES_FILE
 fi
-echo "changelog for $TAGS_COUNT tags updated in ./$CHANGES_FILE"
+echo "debian changelog for $TAGS_COUNT tags updated in ./$CHANGES_FILE"
 
 

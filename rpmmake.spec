@@ -42,6 +42,10 @@ export INSTALL_ROOT=$RPM_BUILD_ROOT
 mkdir -p %{buildroot}/usr/bin
 install -m 755 ./rpmmake %{buildroot}/usr/bin/
 sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=%{version}/" %{buildroot}/usr/bin/rpmmake && rm -f %{buildroot}/usr/bin/rpmmake.bkp
+install -m 755 ./rpmmake-changelog %{buildroot}/usr/bin/
+sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=%{version}/" %{buildroot}/usr/bin/rpmmake-changelog && rm -f %{buildroot}/usr/bin/rpmmake-changelog.bkp
+install -m 755 ./rpmmake-debchangelog %{buildroot}/usr/bin/
+sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=%{version}/" %{buildroot}/usr/bin/rpmmake-debchangelog && rm -f %{buildroot}/usr/bin/rpmmake-debchangelog.bkp
 
 # >> install post
 # << install post
@@ -55,6 +59,8 @@ sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=%{version}/" %{buildroot}/usr/b
 %defattr(-,root,root,-)
 # >> files
 %{_bindir}/rpmmake
+%{_bindir}/rpmmake-changelog
+%{_bindir}/rpmmake-debchangelog
 # << files
 
 

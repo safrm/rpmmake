@@ -100,6 +100,6 @@ fi
 
 #extra line
 echo $APPEND_LINE  >> $CHANGES_FILE
-echo "changelog for $TAGS_COUNT tags updated in ./$CHANGES_FILE"
+echo "rpm changelog for $TAGS_COUNT tags updated in ./$CHANGES_FILE"
 
 
