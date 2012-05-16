@@ -39,6 +39,11 @@ debian changelog for 7 tags updated in ./debian/changelog
 
 #check changelog form package
 apt-listchanges ./rpmmake_1.0.5_all.deb
+or 
+ar p ./s-scripts_1.0.0_all.deb data.tar.gz | tar zx --wildcards "*/changelog.gz" -O | zcat
+or
+deblog () { ar p $* data.tar.gz | tar zx --wildcards "*/changelog.gz" -O | zcat; }
+deblog ./s-scripts_1.0.0_all.deb
 ...
 
 
