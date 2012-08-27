@@ -1,4 +1,5 @@
 %define buildroot %{_topdir}/%{name}-%{version}-root
+%define APP_BUILD_DATE %(date +'%%Y%%m%%d_%%H%%M')
 
 Name:       rpmmake
 Summary:    create rpm package inside the git repo without beeing root 
@@ -42,11 +43,13 @@ export INSTALL_ROOT=$RPM_BUILD_ROOT
 mkdir -p %{buildroot}/usr/bin
 install -m 755 ./rpmmake %{buildroot}/usr/bin/
 sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=%{version}/" %{buildroot}/usr/bin/rpmmake && rm -f %{buildroot}/usr/bin/rpmmake.bkp
+sed -i".bkp" "1,/^VERSION_DATE=/s/^VERSION_DATE=.*/VERSION_DATE=%{APP_BUILD_DATE}/" %{buildroot}/usr/bin/rpmmake && rm -f %{buildroot}/usr/bin/rpmmake.bkp
 install -m 755 ./rpmmake-changelog %{buildroot}/usr/bin/
 sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=%{version}/" %{buildroot}/usr/bin/rpmmake-changelog && rm -f %{buildroot}/usr/bin/rpmmake-changelog.bkp
+sed -i".bkp" "1,/^VERSION_DATE=/s/^VERSION_DATE=.*/VERSION_DATE=%{APP_BUILD_DATE}/" %{buildroot}/usr/bin/rpmmake-changelog && rm -f %{buildroot}/usr/bin/rpmmake-changelog.bkp
 install -m 755 ./rpmmake-debchangelog %{buildroot}/usr/bin/
 sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=%{version}/" %{buildroot}/usr/bin/rpmmake-debchangelog && rm -f %{buildroot}/usr/bin/rpmmake-debchangelog.bkp
-
+sed -i".bkp" "1,/^VERSION_DATE=/s/^VERSION_DATE=.*/VERSION_DATE=%{APP_BUILD_DATE}/" %{buildroot}/usr/bin/rpmmake-debchangelog && rm -f %{buildroot}/usr/bin/rpmmake-debchangelog.bkp
 # >> install post
 # << install post
 

@@ -26,7 +26,7 @@ while [ $# -gt 0 ]; do
     -b|--basename) shift
                CUSTOM_BASENAME=$1    #clone directory has different name than project
                ;;
-    --version)    echo "`basename $0` $VERSION"
+    --version)    echo "`basename $0` ${VERSION} ${VERSION_DATE}"
                   exit 0
                   ;;  
     -h | --help ) usage 

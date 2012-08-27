@@ -29,7 +29,7 @@ while [ $# -gt 0 ]; do
     -a | --append-line) shift
 	                APPEND_LINE=$1
                         ;;
-    --version)    echo "`basename $0` $VERSION"
+    --version)    echo "`basename $0`  ${VERSION} ${VERSION_DATE}"
                   exit 0
                   ;;  
 	* )       PWD_DIR=$PWD; cd $1   #from different directory
