@@ -11,13 +11,16 @@ USERID=`id -u`
 }
 
 #automatic version 
-. appver
+. appver || APP_FULL_VERSION_TAG=NA && APP_BUILD_DATE=`date +'%Y%m%d_%H%M'`
 
 
 mkdir -p -m 0755 $BINDIR
 install -m 0777 -v ./rpmmake  $BINDIR/
 sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=$APP_FULL_VERSION_TAG/" $BINDIR/rpmmake && rm -f $BINDIR/rpmmake.bkp
+sed -i".bkp" "1,/^VERSION_DATE=/s/^VERSION_DATE=.*/VERSION_DATE=$APP_BUILD_DATE/" $BINDIR/rpmmake && rm -f $BINDIR/rpmmake.bkp
 install -m 0777 -v ./rpmmake-changelog  $BINDIR/
 sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=$APP_FULL_VERSION_TAG/" $BINDIR/rpmmake-changelog && rm -f $BINDIR/rpmmake-changelog.bkp
+sed -i".bkp" "1,/^VERSION_DATE=/s/^VERSION_DATE=.*/VERSION_DATE=$APP_BUILD_DATE/" $BINDIR/rpmmake-changelog && rm -f $BINDIR/rpmmake-changelog.bkp
 install -m 0777 -v ./rpmmake-debchangelog  $BINDIR/
 sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=$APP_FULL_VERSION_TAG/" $BINDIR/rpmmake-debchangelog && rm -f $BINDIR/rpmmake-debchangelog.bkp
+sed -i".bkp" "1,/^VERSION_DATE=/s/^VERSION_DATE=.*/VERSION_DATE=$APP_BUILD_DATE/" $BINDIR/rpmmake-debchangelog && rm -f $BINDIR/rpmmake-debchangelog.bkp

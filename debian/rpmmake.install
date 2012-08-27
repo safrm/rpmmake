@@ -1,2 +1,4 @@
 rpmmake /usr/bin/
+rpmmake-changelog /usr/bin/
+rpmmake-debchangelog /usr/bin/
 
