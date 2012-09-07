@@ -91,6 +91,9 @@ echo "tar ball OK"
 
 #rpmbuild ./<git-name>.spec
 #--target i386
-rpmbuild -ba ./rpm/SOURCES/$BASENAME-$VERSION.spec --define="_topdir `pwd`/rpm" --verbose
+#sign from ~/.rpmmacros
+#%_signature     gpg
+#%_gpg_name      name or key
+rpmbuild -ba ./rpm/SOURCES/$BASENAME-$VERSION.spec --define="_topdir `pwd`/rpm" --verbose --sign
 
 cd $PWD_DIR
