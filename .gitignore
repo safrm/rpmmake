@@ -1,4 +1,5 @@
 debian/files
+debian/changelog
 debian/rpmmake.debhelper.log
 debian/rpmmake.substvars
 debian/rpmmake/*
