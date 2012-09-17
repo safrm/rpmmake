@@ -2,7 +2,7 @@
 %define APP_BUILD_DATE %(date +'%%Y%%m%%d_%%H%%M')
 
 Name:       rpmmake
-Summary:    create rpm package inside the git repo without beeing root 
+Summary:    Create rpm package inside the git repo without beeing root 
 Version:    1.0.0
 Release:    1
 Group:      System/Libraries
@@ -16,7 +16,7 @@ Autoreqprov: on
 BuildRoot: %{buildroot}
 
 %description
-fast script to create rpm package inside the git repo without beeing root 
+Fast script to create rpm package inside the git repo without beeing root 
 
 
 
