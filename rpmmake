@@ -16,16 +16,21 @@ usage() {
     echo "<path_to_project_git_dir>  path to git directory (empty uses current directory)"
     echo "args:"
     echo "  -b | --basename     project name is taken from argument <my-project> instead of directory name"
+    echo "  -ns | --nosign      do not sign the package"
     echo "  -h | --help         prints this help"
     echo ""
     echo "rpmmake: ${VERSION} ${VERSION_DATE}"
 }
-
+SIGN_ARG=" --sign"
 while [ $# -gt 0 ]; do
   case "$1" in
     -b|--basename) shift
                CUSTOM_BASENAME=$1    #clone directory has different name than project
                ;;
+    -ns|--nosign)
+               SIGN_ARG=""
+               ;;
+
     --version)    echo "`basename $0` ${VERSION} ${VERSION_DATE}"
                   exit 0
                   ;;  
@@ -94,6 +99,6 @@ echo "tar ball OK"
 #sign from ~/.rpmmacros
 #%_signature     gpg
 #%_gpg_name      name or key
-rpmbuild -ba ./rpm/SOURCES/$BASENAME-$VERSION.spec --define="_topdir `pwd`/rpm" --verbose --sign
+rpmbuild -ba ./rpm/SOURCES/$BASENAME-$VERSION.spec --define="_topdir `pwd`/rpm" --verbose $SIGN_ARG
 
 cd $PWD_DIR
