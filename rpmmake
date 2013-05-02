@@ -78,8 +78,10 @@ cat ./$BASENAME.changes >> rpm/SOURCES/$BASENAME-$VERSION.spec
 #update release no
 #NEW_RELEASE=$[`awk '/Release/ {print $2}' $BASENAME.spec`+1]
 
-#clear current sources
-qmake && make distclean
+#qt clear current sources
+if ls -U *.pro > /dev/null 2>&1; then
+    qmake && make distclean
+fi
 
 #add rpm exclude
 #for old tar
