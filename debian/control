@@ -7,7 +7,7 @@ Standards-Version: 1.0.0
 
 Package: rpmmake
 Architecture: all
-Depends: debhelper (>= 5), rpm, tar, ${misc:Depends}, ${launcher:Depends}, ${shlibs:Depends}
+Depends: rpm, tar, ${misc:Depends}, ${launcher:Depends}, ${shlibs:Depends}
 Description: create rpm package inside the git repo without being root 
 
 
