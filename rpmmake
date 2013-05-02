@@ -15,13 +15,15 @@ usage() {
     echo ""
     echo "<path_to_project_git_dir>  path to git directory (empty uses current directory)"
     echo "args:"
-    echo "  -b | --basename     project name is taken from argument <my-project> instead of directory name"
+    echo "  -b  | --basename     project name is taken from argument <my-project> instead of directory name"
     echo "  -ns | --nosign      do not sign the package"
-    echo "  -h | --help         prints this help"
+    echo "  -nv | --noverify    do not run package verification"
+    echo "  -h  | --help         prints this help"
     echo ""
     echo "rpmmake: ${VERSION} ${VERSION_DATE}"
 }
 SIGN_ARG=" --sign"
+VERIFY=1
 while [ $# -gt 0 ]; do
   case "$1" in
     -b|--basename) shift
@@ -29,6 +31,9 @@ while [ $# -gt 0 ]; do
                ;;
     -ns|--nosign)
                SIGN_ARG=""
+               ;;
+    -nv|--noverify)
+               VERIFY=0
                ;;
 
     --version)    echo "`basename $0` ${VERSION} ${VERSION_DATE}"
@@ -103,4 +108,21 @@ echo "tar ball OK"
 #%_gpg_name      name or key
 rpmbuild -ba ./rpm/SOURCES/$BASENAME-$VERSION.spec --define="_topdir `pwd`/rpm" --verbose $SIGN_ARG
 
+#verification
+if [ $? = 0 -a $VERIFY = 1 ] 
+then
+    PACKAGES=`find ./rpm/ -type f -name "*.rpm" -not -name "*.src.rpm"`
+    for PACKAGE in $PACKAGES ; do
+
+    rpm -qip $PACKAGE
+    if [ $? != 0 ] 
+    then
+      echo "problem with $PACKAGE exiting...";
+      exit 1;
+    fi
+done
+fi
 cd $PWD_DIR
+
+
+
