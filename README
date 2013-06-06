@@ -7,6 +7,7 @@ content:
  rpmmake  ................ main linux bash script
  rpmmake-changelog ....... generates rpm changelog (<my-project>.changes file) from git log
  rpmmake-debchangelog .... generates debian changelog (debian/changelog file) from git log
+ rpmmake-expect .......... expect wrapper for signing passphrase 
  install.sh .............. executes installation to /urs/bin directory
 
 usage1:

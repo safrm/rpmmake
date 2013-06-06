@@ -24,3 +24,4 @@ sed -i".bkp" "1,/^VERSION_DATE=/s/^VERSION_DATE=.*/VERSION_DATE=$APP_BUILD_DATE/
 install -m 0777 -v ./rpmmake-debchangelog  $BINDIR/
 sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=$APP_FULL_VERSION_TAG/" $BINDIR/rpmmake-debchangelog && rm -f $BINDIR/rpmmake-debchangelog.bkp
 sed -i".bkp" "1,/^VERSION_DATE=/s/^VERSION_DATE=.*/VERSION_DATE=$APP_BUILD_DATE/" $BINDIR/rpmmake-debchangelog && rm -f $BINDIR/rpmmake-debchangelog.bkp
+install -m 0777 -v ./rpmmake-expect  $BINDIR/

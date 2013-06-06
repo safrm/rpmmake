@@ -1,0 +1,8 @@
+#!/usr/bin/expect
+#rpmmake - fast script to create rpm package inside the git repo without being root - https://github.com/safrm/rpmmake
+#author: Miroslav Safr <miroslav.safr@gmail.com>
+#
+spawn  {*}$argv
+expect -exact "Enter pass phrase: "
+send -- "\r"
+expect eof

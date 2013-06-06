@@ -17,6 +17,7 @@ usage() {
     echo "args:"
     echo "  -b  | --basename     project name is taken from argument <my-project> instead of directory name"
     echo "  -ns | --nosign      do not sign the package"
+    echo "  -ne | --noexpect    do not use expect to enter passphrase"
     echo "  -nv | --noverify    do not run package verification"
     echo "  -h  | --help         prints this help"
     echo ""
@@ -24,6 +25,7 @@ usage() {
 }
 SIGN_ARG=" --sign"
 VERIFY=1
+EXPECT=1
 while [ $# -gt 0 ]; do
   case "$1" in
     -b|--basename) shift
@@ -35,7 +37,9 @@ while [ $# -gt 0 ]; do
     -nv|--noverify)
                VERIFY=0
                ;;
-
+    -ne|--noexpect)
+               EXPECT=0
+               ;;
     --version)    echo "`basename $0` ${VERSION} ${VERSION_DATE}"
                   exit 0
                   ;;  
@@ -106,7 +110,11 @@ echo "tar ball OK"
 #sign from ~/.rpmmacros
 #%_signature     gpg
 #%_gpg_name      name or key
-rpmbuild -ba ./rpm/SOURCES/$BASENAME-$VERSION.spec --define="_topdir `pwd`/rpm" --verbose $SIGN_ARG
+if [ $EXPECT -eq 1 ]; then
+    rpmmake-expect rpmbuild -ba ./rpm/SOURCES/$BASENAME-$VERSION.spec --define="_topdir `pwd`/rpm" --verbose $SIGN_ARG
+else
+    rpmbuild -ba ./rpm/SOURCES/$BASENAME-$VERSION.spec --define="_topdir `pwd`/rpm" --verbose $SIGN_ARG
+fi
 
 #verification
 if [ $? = 0 -a $VERIFY = 1 ] 

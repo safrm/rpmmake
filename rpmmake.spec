@@ -50,6 +50,7 @@ sed -i".bkp" "1,/^VERSION_DATE=/s/^VERSION_DATE=.*/VERSION_DATE=%{APP_BUILD_DATE
 install -m 755 ./rpmmake-debchangelog %{buildroot}/usr/bin/
 sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=%{version}/" %{buildroot}/usr/bin/rpmmake-debchangelog && rm -f %{buildroot}/usr/bin/rpmmake-debchangelog.bkp
 sed -i".bkp" "1,/^VERSION_DATE=/s/^VERSION_DATE=.*/VERSION_DATE=%{APP_BUILD_DATE}/" %{buildroot}/usr/bin/rpmmake-debchangelog && rm -f %{buildroot}/usr/bin/rpmmake-debchangelog.bkp
+install -m 755 ./rpmmake-expect %{buildroot}/usr/bin/
 # >> install post
 # << install post
 
@@ -64,6 +65,7 @@ sed -i".bkp" "1,/^VERSION_DATE=/s/^VERSION_DATE=.*/VERSION_DATE=%{APP_BUILD_DATE
 %{_bindir}/rpmmake
 %{_bindir}/rpmmake-changelog
 %{_bindir}/rpmmake-debchangelog
+%{_bindir}/rpmmake-expect
 # << files
 
 
