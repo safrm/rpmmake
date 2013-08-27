@@ -15,11 +15,14 @@ usage() {
     echo ""
     echo "<path_to_project_git_dir>  path to git directory (empty uses current directory)"
     echo "args:"
-    echo "  -b  | --basename     project name is taken from argument <my-project> instead of directory name"
-    echo "  -ns | --nosign      do not sign the package"
-    echo "  -ne | --noexpect    do not use expect to enter passphrase"
-    echo "  -nv | --noverify    do not run package verification"
-    echo "  -h  | --help         prints this help"
+    echo "  -b  | --basename <my-project>    project name is taken from argument <my-project> instead of directory name"
+    echo "  -sv | --set-version <my-version> project version is taken from argument <my-version> instead of git tag"
+    echo "  -sr | --set-release <my-release> project release is taken from argument <my-release> instead of spec file"
+    echo "  -ns | --nosign                   do not sign the package"
+    echo "  -ne | --noexpect                 do not use expect to enter passphrase"
+    echo "  -nv | --noverify                 do not run package verification"
+    echo "  -v  | --version                  prints version of scripts"
+    echo "  -h  | --help                     prints this help"
     echo ""
     echo "rpmmake: ${VERSION} ${VERSION_DATE}"
 }
@@ -31,6 +34,12 @@ while [ $# -gt 0 ]; do
     -b|--basename) shift
                CUSTOM_BASENAME=$1    #clone directory has different name than project
                ;;
+    -sv|--set-version) shift
+               RPM_VERSION=$1           #custom version
+               ;;
+    -sr|--set-release) shift
+               RPM_RELEASE=$1           #custom release
+               ;;
     -ns|--nosign)
                SIGN_ARG=""
                ;;
@@ -40,7 +49,7 @@ while [ $# -gt 0 ]; do
     -ne|--noexpect)
                EXPECT=0
                ;;
-    --version)    echo "`basename $0` ${VERSION} ${VERSION_DATE}"
+    -v |--version) echo "`basename $0` ${VERSION} ${VERSION_DATE}"
                   exit 0
                   ;;  
     -h | --help ) usage 
@@ -61,30 +70,38 @@ then
     exit 1
 fi
 
-VERSION=`git describe --abbrev=0 2> /dev/null`
-if [ "x$VERSION" = "x" ]
+#version autodetection from git if not set by args
+if [ "x$RPM_VERSION" = "x" ]
+then
+    RPM_VERSION=`git describe --abbrev=0 2> /dev/null`
+fi
+if [ "x$RPM_VERSION" = "x" ]
 then
     echo "error: version not detected"
     exit 1
 fi
-echo "preparing $BASENAME-$VERSION"
+echo "preparing $BASENAME-$RPM_VERSION $RPM_RELEASE"
 
 #cleaning
 rm -fr ./rpm
 mkdir -p rpm/SOURCES rpm/BUILD rpm/SRPMS rpm/RPMS/i386 
 
 #update version in spec from git tag
-#sed -i".bkp" "s/^Version:.*/Version:    ${VERSION}/" ./$BASENAME.spec && rm $BASENAME.spec.bkp
-sed  "s/^Version:.*/Version:    ${VERSION}/" ./$BASENAME.spec > rpm/SOURCES/$BASENAME-$VERSION.spec
+sed  "s/^Version:.*/Version:    ${RPM_VERSION}/" ./$BASENAME.spec > rpm/SOURCES/$BASENAME-$RPM_VERSION.spec
+
+#update release in spec from args
+if [ "x$RPM_RELEASE" != "x" ]; then
+	sed -i".bkp" "s/^Release:.*/Release:     ${RPM_RELEASE}/" rpm/SOURCES/$BASENAME-$RPM_VERSION.spec && rm -f rpm/SOURCES/$BASENAME-$RPM_VERSION.spec.bkp
+fi
 
 #use changelog from edited file
 if [ ! -e ./$BASENAME.changes ]; then
 #or generate changelog automatically 
   rpmmake-changelog -b $BASENAME 
 fi
-cat ./$BASENAME.changes >> rpm/SOURCES/$BASENAME-$VERSION.spec
+cat ./$BASENAME.changes >> rpm/SOURCES/$BASENAME-$RPM_VERSION.spec
 
-#update release no
+#update release no automaticaly
 #NEW_RELEASE=$[`awk '/Release/ {print $2}' $BASENAME.spec`+1]
 
 #qt clear current sources
@@ -98,10 +115,10 @@ TAR_MIN_VERSION=`tar --version | head -1 |  awk -F"[ .]" ' { print   $5 }'`
 if [ $TAR_MIN_VERSION -lt 21 ]
 then
   echo "old tar $TAR_MIN_VERSION "
-  tar --exclude=.gitignore --exclude=.git/* --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* -cvjf rpm/SOURCES/$BASENAME-$VERSION.tar.bz2  ./
+  tar --exclude=.gitignore --exclude=.git/* --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* -cvjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
 else
   echo "new tar $TAR_MIN_VERSION "
-  tar --exclude-vcs --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* -cvjf rpm/SOURCES/$BASENAME-$VERSION.tar.bz2  ./
+  tar --exclude-vcs --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* -cvjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
 fi
 echo "tar ball OK"
 
@@ -111,9 +128,9 @@ echo "tar ball OK"
 #%_signature     gpg
 #%_gpg_name      name or key
 if [ $EXPECT -eq 1 ]; then
-    rpmmake-expect rpmbuild -ba ./rpm/SOURCES/$BASENAME-$VERSION.spec --define="_topdir `pwd`/rpm" --verbose $SIGN_ARG
+    rpmmake-expect rpmbuild -ba ./rpm/SOURCES/$BASENAME-$RPM_VERSION.spec --define="_topdir `pwd`/rpm" --verbose $SIGN_ARG
 else
-    rpmbuild -ba ./rpm/SOURCES/$BASENAME-$VERSION.spec --define="_topdir `pwd`/rpm" --verbose $SIGN_ARG
+    rpmbuild -ba ./rpm/SOURCES/$BASENAME-$RPM_VERSION.spec --define="_topdir `pwd`/rpm" --verbose $SIGN_ARG
 fi
 
 #verification
