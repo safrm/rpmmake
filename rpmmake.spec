@@ -14,7 +14,7 @@ Source0:    %{name}-%{version}.tar.bz2
 Autoreq: on
 Autoreqprov: on
 BuildRoot: %{buildroot}
-
+Requires:  expect
 %description
 Fast script to create rpm package inside the git repo without beeing root 
 
