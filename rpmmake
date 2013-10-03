@@ -18,6 +18,7 @@ usage() {
     echo "  -b  | --basename <my-project>    project name is taken from argument <my-project> instead of directory name"
     echo "  -sv | --set-version <my-version> project version is taken from argument <my-version> instead of git tag"
     echo "  -sr | --set-release <my-release> project release is taken from argument <my-release> instead of spec file"
+    echo "  -sp | --spec-version             prefer version from spec file over git tag"
     echo "  -ns | --nosign                   do not sign the package"
     echo "  -ne | --noexpect                 do not use expect to enter passphrase"
     echo "  -nv | --noverify                 do not run package verification"
@@ -29,11 +30,15 @@ usage() {
 SIGN_ARG=" --sign"
 VERIFY=1
 EXPECT=1
+USE_VERSION_FROM_SPEC=0
 while [ $# -gt 0 ]; do
   case "$1" in
     -b|--basename) shift
                CUSTOM_BASENAME=$1    #clone directory has different name than project
                ;;
+    -sp|--spec-version)
+		USE_VERSION_FROM_SPEC=1
+		;;
     -sv|--set-version) shift
                RPM_VERSION=$1           #custom version
                ;;
@@ -74,6 +79,9 @@ fi
 if [ "x$RPM_VERSION" = "x" ]
 then
     RPM_VERSION=`git describe --abbrev=0 2> /dev/null`
+    if [ $USE_VERSION_FROM_SPEC -eq 1 ] || [ "x$RPM_VERSION" = "x" ]; then
+	RPM_VERSION=`cat  $BASENAME.spec  |grep -E "^Version:" | awk -F " " '{print $2}'`
+    fi
 fi
 if [ "x$RPM_VERSION" = "x" ]
 then
@@ -84,7 +92,7 @@ echo "preparing $BASENAME-$RPM_VERSION $RPM_RELEASE"
 
 #cleaning
 rm -fr ./rpm
-mkdir -p rpm/SOURCES rpm/BUILD rpm/SRPMS rpm/RPMS/i386 
+mkdir -p -m 0777 rpm/SOURCES rpm/BUILD rpm/SRPMS rpm/RPMS/i386 
 
 #update version in spec from git tag
 sed  "s/^Version:.*/Version:    ${RPM_VERSION}/" ./$BASENAME.spec > rpm/SOURCES/$BASENAME-$RPM_VERSION.spec
