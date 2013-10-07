@@ -22,6 +22,7 @@ usage() {
     echo "  -ns | --nosign                   do not sign the package"
     echo "  -ne | --noexpect                 do not use expect to enter passphrase"
     echo "  -nv | --noverify                 do not run package verification"
+    echo "  -pp | --passphrase <passphrase>  pass passphrase or use export PASSPHRASE=<pp>"
     echo "  -v  | --version                  prints version of scripts"
     echo "  -h  | --help                     prints this help"
     echo ""
@@ -53,6 +54,9 @@ while [ $# -gt 0 ]; do
                ;;
     -ne|--noexpect)
                EXPECT=0
+               ;;
+    -pp | --passphrase) shift
+              export PASSPHRASE=$1
                ;;
     -v |--version) echo "`basename $0` ${VERSION} ${VERSION_DATE}"
                   exit 0
