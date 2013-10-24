@@ -19,7 +19,8 @@ usage() {
     echo "  -sv | --set-version <my-version> project version is taken from argument <my-version> instead of git tag"
     echo "  -sr | --set-release <my-release> project release is taken from argument <my-release> instead of spec file"
     echo "  -sp | --spec-version             prefer version from spec file over git tag"
-    echo "  -gn | --gpg-name <gpg-name>      set custom gpg name for signing"
+    echo "  -gn | --gpg-name <gpg-name>      set custom gpg name for signing by name"
+    echo "  -gk | --gpg-key <gpg-key>        set custom gpg name for signing by key"                
     echo "  -ve | --vendor <vendor-name>     set custom vendor for signing"
     echo "  -ns | --nosign                   do not sign the package"
     echo "  -ne | --noexpect                 do not use expect to enter passphrase"
@@ -55,6 +56,11 @@ while [ $# -gt 0 ]; do
                ;;
     -gn|--gpg-name) shift
 		GPG_NAME=$1
+		;;
+    -gk|--gpg-key) shift
+		GPG_KEY=$1
+		GPG_NAME=`gpg --list-keys | grep "$GPGKEY" -1 | grep uid | sed "s/uid *//"`
+		if [ -z "$GPG_NAME" ]; then echo "wrong gpg key $GPG_KEY"; exit 1; fi
 		;;
     -ve|--vendor) shift
 		VENDOR=$1
@@ -146,6 +152,9 @@ else
   tar --exclude-vcs --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* -cvjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
 fi
 echo "tar ball OK"
+
+if [ ]
+GPG_NAME=`gpg --list-keys | grep "$GPGKEY" -1 | grep uid | sed "s/uid *//"`
 
 if [ ! -z "$GPG_NAME" ]; then
 	GPG_NAME_ARG="--define='_gpg_name $GPG_NAME' --define='_signature gpg'"
