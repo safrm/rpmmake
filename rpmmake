@@ -68,7 +68,7 @@ while [ $# -gt 0 ]; do
                EXPECT=0
                ;;
     -pp | --passphrase) shift
-              PASSPHRASE=$1
+              export PASSPHRASE=$1
                ;;
     -v | --verbose)
 		VERBOSE="--verbose"
@@ -155,7 +155,6 @@ if [ ! -z "$GPG_NAME" ]; then
 	echo "using gpg_name $GPG_NAME"
 fi
 
-export PASSPHRASE=$PASSPHRASE
 #default sign from ~/.rpmmacros
 #%_signature     gpg
 #%_gpg_name      name or key
