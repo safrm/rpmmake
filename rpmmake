@@ -19,11 +19,14 @@ usage() {
     echo "  -sv | --set-version <my-version> project version is taken from argument <my-version> instead of git tag"
     echo "  -sr | --set-release <my-release> project release is taken from argument <my-release> instead of spec file"
     echo "  -sp | --spec-version             prefer version from spec file over git tag"
+    echo "  -gn | --gpg-name <gpg-name>      set custom gpg name for signing"
+    echo "  -ve | --vendor <vendor-name>     set custom vendor for signing"
     echo "  -ns | --nosign                   do not sign the package"
     echo "  -ne | --noexpect                 do not use expect to enter passphrase"
     echo "  -nv | --noverify                 do not run package verification"
     echo "  -pp | --passphrase <passphrase>  pass passphrase or use export PASSPHRASE=<pp>"
-    echo "  -v  | --version                  prints version of scripts"
+    echo "  -v  | --verbose                  prints more output"
+    echo "  -V  | --version                  prints version of scripts"
     echo "  -h  | --help                     prints this help"
     echo ""
     echo "rpmmake: ${VERSION} ${VERSION_DATE}"
@@ -32,7 +35,7 @@ SIGN_ARG=" --sign"
 VERIFY=1
 EXPECT=1
 USE_VERSION_FROM_SPEC=0
-PASSPHRASE=
+
 while [ $# -gt 0 ]; do
   case "$1" in
     -b|--basename) shift
@@ -50,6 +53,12 @@ while [ $# -gt 0 ]; do
     -ns|--nosign)
                SIGN_ARG=""
                ;;
+    -gn|--gpg-name) shift
+		GPG_NAME=$1
+		;;
+    -ve|--vendor) shift
+		VENDOR=$1
+		;;
     -nv|--noverify)
                VERIFY=0
                ;;
@@ -59,7 +68,10 @@ while [ $# -gt 0 ]; do
     -pp | --passphrase) shift
               PASSPHRASE=$1
                ;;
-    -v |--version) echo "`basename $0` ${VERSION} ${VERSION_DATE}"
+    -v | --verbose)
+		VERBOSE=1
+		;;
+    -V | --version) echo "`basename $0` ${VERSION} ${VERSION_DATE}"
                   exit 0
                   ;;  
     -h | --help ) usage 
@@ -135,7 +147,15 @@ else
 fi
 echo "tar ball OK"
 
-
+if [ ! -z "$GPG_NAME" ]; then
+	GPG_NAME_ARG="--define='_gpg_name $GPG_NAME' --define='_signature gpg'"
+fi
+if [ ! -z "$VENDOR" ]; then
+	VENDOR_ARG="--define='vendor $VENDOR' "
+fi
+if [ ! -z "$VERBOSE" ]; then
+	VERBOSE_ARG="--verbose"
+fi
 export PASSPHRASE=$PASSPHRASE
 #rpmbuild ./<git-name>.spec
 #--target i386
@@ -143,9 +163,9 @@ export PASSPHRASE=$PASSPHRASE
 #%_signature     gpg
 #%_gpg_name      name or key
 if [ $EXPECT -eq 1 ]; then
-    rpmmake-expect rpmbuild -ba ./rpm/SOURCES/$BASENAME-$RPM_VERSION.spec --define="_topdir `pwd`/rpm" --verbose $SIGN_ARG
+    rpmmake-expect rpmbuild -ba ./rpm/SOURCES/$BASENAME-$RPM_VERSION.spec --define="_topdir `pwd`/rpm" $GPG_NAME_ARG $VENDOR_ARG $VERBOSE $SIGN_ARG
 else
-    rpmbuild -ba ./rpm/SOURCES/$BASENAME-$RPM_VERSION.spec --define="_topdir `pwd`/rpm" --verbose $SIGN_ARG
+    rpmbuild -ba ./rpm/SOURCES/$BASENAME-$RPM_VERSION.spec --define="_topdir `pwd`/rpm" $VERBOSE $SIGN_ARG
 fi
 
 #verification
