@@ -89,6 +89,10 @@ while [ $# -gt 0 ]; do
   shift
 done
 
+if [ ! -z "$VERBOSE" ]; then
+	VERBOSE_ARG="--verbose"
+fi
+
 #basename from 
 BASENAME=`basename "$PWD"`
 [ "x$CUSTOM_BASENAME" != "x" ] && BASENAME=$CUSTOM_BASENAME
@@ -146,24 +150,18 @@ TAR_MIN_VERSION=`tar --version | head -1 |  awk -F"[ .]" ' { print   $5 }'`
 if [ $TAR_MIN_VERSION -lt 21 ]
 then
   echo "old tar $TAR_MIN_VERSION "
-  tar --exclude=.gitignore --exclude=.git/* --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* -cvjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
+  tar --exclude=.gitignore --exclude=.git/* --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* $VERBOSE_ARG -cjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
 else
   echo "new tar $TAR_MIN_VERSION "
-  tar --exclude-vcs --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* -cvjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
+  tar --exclude-vcs --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* $VERBOSE_ARG -cjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
 fi
 echo "tar ball OK"
-
-if [ ]
-GPG_NAME=`gpg --list-keys | grep "$GPGKEY" -1 | grep uid | sed "s/uid *//"`
 
 if [ ! -z "$GPG_NAME" ]; then
 	GPG_NAME_ARG="--define='_gpg_name $GPG_NAME' --define='_signature gpg'"
 fi
 if [ ! -z "$VENDOR" ]; then
 	VENDOR_ARG="--define='vendor $VENDOR' "
-fi
-if [ ! -z "$VERBOSE" ]; then
-	VERBOSE_ARG="--verbose"
 fi
 export PASSPHRASE=$PASSPHRASE
 #rpmbuild ./<git-name>.spec
@@ -192,6 +190,4 @@ then
 done
 fi
 cd $PWD_DIR
-
-
 
