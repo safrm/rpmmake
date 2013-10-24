@@ -21,7 +21,6 @@ usage() {
     echo "  -sp | --spec-version             prefer version from spec file over git tag"
     echo "  -gn | --gpg-name <gpg-name>      set custom gpg name for signing by name"
     echo "  -gk | --gpg-key <gpg-key>        set custom gpg name for signing by key"                
-    echo "  -ve | --vendor <vendor-name>     set custom vendor for signing"
     echo "  -ns | --nosign                   do not sign the package"
     echo "  -ne | --noexpect                 do not use expect to enter passphrase"
     echo "  -nv | --noverify                 do not run package verification"
@@ -61,9 +60,6 @@ while [ $# -gt 0 ]; do
 		GPG_KEY=$1
 		GPG_NAME=`gpg --list-keys | grep "$GPGKEY" -1 | grep uid | sed "s/uid *//"`
 		if [ -z "$GPG_NAME" ]; then echo "wrong gpg key $GPG_KEY"; exit 1; fi
-		;;
-    -ve|--vendor) shift
-		VENDOR=$1
 		;;
     -nv|--noverify)
                VERIFY=0
@@ -158,10 +154,6 @@ if [ ! -z "$GPG_NAME" ]; then
 #	GPG_NAME_ARG="--define=_gpg_name '$GPG_NAME' --define=_signature gpg"
 	echo "using gpg_name $GPG_NAME"
 fi
-if [ ! -z "$VENDOR" ]; then
-	VENDOR_ARG="--define=vendor '$VENDOR'"
-	echo "using vendor $VENDOR"
-fi
 
 export PASSPHRASE=$PASSPHRASE
 #default sign from ~/.rpmmacros
@@ -183,11 +175,11 @@ if [ $SIGN -eq 1 ]; then
 	do
 		echo "signing> $SIGN_NAME KEY:$GPGKEY FILE:$ENTRY"
 		if [ $EXPECT -eq 1 ]; then
-			rpmmake-expect rpm --addsign $VERBOSE -D "_signature gpg" -D "_gpg_name $GPG_NAME"  $VENDOR_ARG "$ENTRY"
+			rpmmake-expect rpm --addsign $VERBOSE -D "_signature gpg" -D "_gpg_name $GPG_NAME"  "$ENTRY"
 		else
-			rpm --addsign $VERBOSE -D "_signature gpg" -D "_gpg_name $GPG_NAME" $VENDOR_ARG "$ENTRY"
+			rpm --addsign $VERBOSE -D "_signature gpg" -D "_gpg_name $GPG_NAME" "$ENTRY"
 		fi
-	        rpm --checksig "$ENTRY"
+	        rpm --checksig $VERBOSE "$ENTRY"
 	done
 	}
 fi
