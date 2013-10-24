@@ -168,6 +168,10 @@ cd $PWD
 
 #signing
 if [ $SIGN -eq 1 ]; then
+	if [ -z "$GPG_NAME" ]; then 
+		GPG_NAME=`gpg --list-keys | grep "$GPGKEY" -1 | grep uid | sed "s/uid *//"`
+		echo "using default(first) gpg key $GPG_KEY"; 
+	fi
 	PACKAGES=`find $PWD/rpm -type f -printf '%p\n' | grep -i -E -Z '\.(rpm)$'`
 	echo "${PACKAGES}" | \
 	{ while IFS='\n' read -r ENTRY ;
