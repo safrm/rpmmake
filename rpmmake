@@ -32,7 +32,7 @@ usage() {
     echo ""
     echo "rpmmake: ${VERSION} ${VERSION_DATE}"
 }
-SIGN_ARG=" --sign"
+SIGN=1
 VERIFY=1
 EXPECT=1
 USE_VERSION_FROM_SPEC=0
@@ -52,7 +52,7 @@ while [ $# -gt 0 ]; do
                RPM_RELEASE=$1           #custom release
                ;;
     -ns|--nosign)
-               SIGN_ARG=""
+               SIGN=0
                ;;
     -gn|--gpg-name) shift
 		GPG_NAME=$1
@@ -75,7 +75,7 @@ while [ $# -gt 0 ]; do
               PASSPHRASE=$1
                ;;
     -v | --verbose)
-		VERBOSE=1
+		VERBOSE="--verbose"
 		;;
     -V | --version) echo "`basename $0` ${VERSION} ${VERSION_DATE}"
                   exit 0
@@ -83,17 +83,14 @@ while [ $# -gt 0 ]; do
     -h | --help ) usage 
 		  exit 0
                   ;;
-	* )       PWD_DIR=$PWD; cd $1   #from different directory
+	* )       ORIG_PWD_DIR=`pwd`; cd $1   #from different directory
 			   ;; 
   esac
   shift
 done
 
-if [ ! -z "$VERBOSE" ]; then
-	VERBOSE_ARG="--verbose"
-fi
-
 #basename from 
+PWD=`pwd`
 BASENAME=`basename "$PWD"`
 [ "x$CUSTOM_BASENAME" != "x" ] && BASENAME=$CUSTOM_BASENAME
 if [ ! -f $BASENAME.spec ]
@@ -150,35 +147,56 @@ TAR_MIN_VERSION=`tar --version | head -1 |  awk -F"[ .]" ' { print   $5 }'`
 if [ $TAR_MIN_VERSION -lt 21 ]
 then
   echo "old tar $TAR_MIN_VERSION "
-  tar --exclude=.gitignore --exclude=.git/* --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* $VERBOSE_ARG -cjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
+  tar --exclude=.gitignore --exclude=.git/* --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* $VERBOSE -cjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
 else
   echo "new tar $TAR_MIN_VERSION "
-  tar --exclude-vcs --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* $VERBOSE_ARG -cjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
+  tar --exclude-vcs --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* $VERBOSE -cjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
 fi
 echo "tar ball OK"
 
 if [ ! -z "$GPG_NAME" ]; then
-	GPG_NAME_ARG="--define='_gpg_name $GPG_NAME' --define='_signature gpg'"
+#	GPG_NAME_ARG="--define=_gpg_name '$GPG_NAME' --define=_signature gpg"
+	echo "using gpg_name $GPG_NAME"
 fi
 if [ ! -z "$VENDOR" ]; then
-	VENDOR_ARG="--define='vendor $VENDOR' "
+	VENDOR_ARG="--define=vendor '$VENDOR'"
+	echo "using vendor $VENDOR"
 fi
+
 export PASSPHRASE=$PASSPHRASE
-#rpmbuild ./<git-name>.spec
-#--target i386
-#sign from ~/.rpmmacros
+#default sign from ~/.rpmmacros
 #%_signature     gpg
 #%_gpg_name      name or key
-if [ $EXPECT -eq 1 ]; then
-    rpmmake-expect rpmbuild -ba ./rpm/SOURCES/$BASENAME-$RPM_VERSION.spec --define="_topdir `pwd`/rpm" $GPG_NAME_ARG $VENDOR_ARG $VERBOSE $SIGN_ARG
-else
-    rpmbuild -ba ./rpm/SOURCES/$BASENAME-$RPM_VERSION.spec --define="_topdir `pwd`/rpm" $VERBOSE $SIGN_ARG
+
+rpmbuild -ba ./rpm/SOURCES/$BASENAME-$RPM_VERSION.spec --define="_topdir $PWD/rpm" $VERBOSE 
+if [ $? != 0 ]; then
+   echo "rpmbuild failed, exiting..."
+   exit 1
+fi
+cd $PWD
+
+#signing
+if [ $SIGN -eq 1 ]; then
+	PACKAGES=`find $PWD/rpm -type f -printf '%p\n' | grep -i -E -Z '\.(rpm)$'`
+	echo "${PACKAGES}" | \
+	{ while IFS='\n' read -r ENTRY ;
+	do
+		echo "signing> $SIGN_NAME KEY:$GPGKEY FILE:$ENTRY"
+		if [ $EXPECT -eq 1 ]; then
+			rpmmake-expect rpm --addsign $VERBOSE -D "_signature gpg" -D "_gpg_name $GPG_NAME"  $VENDOR_ARG "$ENTRY"
+		else
+			rpm --addsign $VERBOSE -D "_signature gpg" -D "_gpg_name $GPG_NAME" $VENDOR_ARG "$ENTRY"
+		fi
+	        rpm --checksig "$ENTRY"
+	done
+	}
 fi
 
 #verification
-if [ $? = 0 -a $VERIFY = 1 ] 
+if [ $VERIFY = 1 ] 
 then
-    PACKAGES=`find ./rpm/ -type f -name "*.rpm" -not -name "*.src.rpm"`
+    #to not have them 2x
+    PACKAGES=`find $PWD/rpm -type f -name "*.rpm" -not -name "*.src.rpm"`
     for PACKAGE in $PACKAGES ; do
 
     rpm -qip $PACKAGE
@@ -189,5 +207,5 @@ then
     fi
 done
 fi
-cd $PWD_DIR
+cd $ORIG_PWD_DIR
 
