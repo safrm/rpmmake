@@ -5,3 +5,4 @@ debian/rpmmake.substvars
 debian/rpmmake/*
 rpm/*
 *.changes
+*~
