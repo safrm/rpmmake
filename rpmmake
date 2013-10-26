@@ -112,7 +112,7 @@ echo "preparing $BASENAME-$RPM_VERSION $RPM_RELEASE"
 
 #cleaning
 rm -fr ./rpm
-mkdir -p -m 0777 rpm/SOURCES rpm/BUILD rpm/SRPMS rpm/RPMS/i386 
+mkdir -p -m 0777 rpm/SOURCES rpm/BUILD rpm/SRPMS rpm/RPMS/i386 rpm/RPMS/`uname -i`
 
 #update version in spec from git tag
 sed  "s/^Version:.*/Version:    ${RPM_VERSION}/" ./$BASENAME.spec > rpm/SOURCES/$BASENAME-$RPM_VERSION.spec
