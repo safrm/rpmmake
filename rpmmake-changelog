@@ -21,7 +21,7 @@ APPEND_LINE=""
 while [ $# -gt 0 ]; do
   case "$1" in
     -b|--basename) shift
-               CUSTOM_BASENAME=$1    #clone directory has different name than project
+               BASENAME=$1    #clone directory has different name than project
                ;;
     -t|--tags) shift
                TAGS_COUNT=$1   
@@ -38,9 +38,8 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-#basename from 
-BASENAME=`basename "$PWD"`
-[ "x$CUSTOM_BASENAME" != "x" ] && BASENAME=$CUSTOM_BASENAME
+#basename from arg or directory
+[ -z "$BASENAME" ] && BASENAME=`basename "$PWD"`
 CHANGES_FILE=$BASENAME.changes
 
 #generate
