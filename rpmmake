@@ -127,7 +127,7 @@ if [ `grep -qE "%changelog" $BASENAME.spec` -ne 0 ]; then
   #use changelog from edited file 
   if [ ! -e ./$BASENAME.changes ]; then
     #or generate changelog automatically from git
-    rpmmake-changelog -b $BASENAME 
+    rpmmake-changelog -b $BASENAME -sv $RPM_VERSION
   fi
   cat ./$BASENAME.changes >> rpm/SOURCES/$BASENAME-$RPM_VERSION.spec
 fi
