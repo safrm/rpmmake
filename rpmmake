@@ -122,12 +122,15 @@ if [ "x$RPM_RELEASE" != "x" ]; then
 	sed -i".bkp" "s/^Release:.*/Release:     ${RPM_RELEASE}/" rpm/SOURCES/$BASENAME-$RPM_VERSION.spec && rm -f rpm/SOURCES/$BASENAME-$RPM_VERSION.spec.bkp
 fi
 
-#use changelog from edited file
-if [ ! -e ./$BASENAME.changes ]; then
-#or generate changelog automatically 
-  rpmmake-changelog -b $BASENAME 
+#if there exist changelog section in spec file we don't overwrite it
+if [ `grep -qE "%changelog" $BASENAME.spec` -ne 0 ]; then
+  #use changelog from edited file 
+  if [ ! -e ./$BASENAME.changes ]; then
+    #or generate changelog automatically from git
+    rpmmake-changelog -b $BASENAME 
+  fi
+  cat ./$BASENAME.changes >> rpm/SOURCES/$BASENAME-$RPM_VERSION.spec
 fi
-cat ./$BASENAME.changes >> rpm/SOURCES/$BASENAME-$RPM_VERSION.spec
 
 #update release no automaticaly
 #NEW_RELEASE=$[`awk '/Release/ {print $2}' $BASENAME.spec`+1]
