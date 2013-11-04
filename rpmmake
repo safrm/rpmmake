@@ -123,7 +123,8 @@ if [ "x$RPM_RELEASE" != "x" ]; then
 fi
 
 #if there exist changelog section in spec file we don't overwrite it
-if [ `grep -qE "%changelog" $BASENAME.spec` -ne 0 ]; then
+RESULT=`grep -qE "%changelog" $BASENAME.spec 2> /dev/null `
+if [ $? -ne 0 ]; then
   #use changelog from edited file 
   if [ ! -e ./$BASENAME.changes ]; then
     #or generate changelog automatically from git
