@@ -1,5 +1,5 @@
-#!/bin/sh
-#rpmmake - fast script to create rpm package inside the git repo without being root - https://github.com/safrm/rpmmake
+#!/bin/sh -e
+#rpmmake - fast script to create rpm package inside the git repo without being root - https://github.com/safrm/rpmmake 
 #author: Miroslav Safr <miroslav.safr@gmail.com>
 #
 #usage1: <my-project>$ rpmmake  ................... builds rpms from <my-project>/<my-project>.spec in <my-project>/rpm rootdir 
@@ -198,13 +198,13 @@ then
     PACKAGES=`find $PWD/rpm -type f -name "*.rpm" -not -name "*.src.rpm"`
     for PACKAGE in $PACKAGES ; do
 
-    rpm -qip $PACKAGE
-    if [ $? != 0 ] 
-    then
-      echo "problem with $PACKAGE exiting...";
-      exit 1;
-    fi
-done
+        rpm -qip $PACKAGE
+        if [ $? != 0 ] 
+        then
+            echo "problem with $PACKAGE exiting...";
+            exit 1;
+        fi
+    done || exit 1
 fi
 cd $ORIG_PWD_DIR
 
