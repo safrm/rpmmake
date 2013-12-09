@@ -13,6 +13,14 @@ USERID=`id -u`
 #automatic version 
 if [ command -v appver >/dev/null 2>&1 ]; then . appver; else APP_FULL_VERSION_TAG=NA ; APP_BUILD_DATE=`date +'%Y%m%d_%H%M'`; fi
 
+for TEST in $(  grep -r -l -h "#\!/bin/sh" . )
+do
+		sh -n $TEST
+		if  [ $? != 0 ]; then
+			echo "syntax error in $TEST, exiting.." 
+			exit 1
+		fi
+done 
 
 mkdir -p -m 0755 $BINDIR
 install -m 0777 -v ./rpmmake  $BINDIR/

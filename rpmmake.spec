@@ -1,4 +1,3 @@
-%define buildroot %{_topdir}/%{name}-%{version}-root
 %define APP_BUILD_DATE %(date +'%%Y%%m%%d_%%H%%M')
 
 Name:       rpmmake
@@ -13,33 +12,16 @@ Vendor:     Miroslav Safr <miroslav.safr@gmail.com>
 Source0:    %{name}-%{version}.tar.bz2
 Autoreq: on
 Autoreqprov: on
-BuildRoot: %{buildroot}
 Requires:  expect
 %description
 Fast script to create rpm package inside the git repo without beeing root 
 
-
-
 %prep
 %setup -c -n ./%{name}-%{version}
-# >> setup
-# << setup
 
 %build
-# >> build pre
-#qmake install_prefix=/usr
-# << build pre
-#make %{?jobs:-j%jobs}
-
-# >> build post
-# << build post
 
 %install
-rm -fr $RPM_BUILD_ROOT
-# >> install pre
-export INSTALL_ROOT=$RPM_BUILD_ROOT
-# << install pre 
-#make install
 mkdir -p %{buildroot}/usr/bin
 install -m 755 ./rpmmake %{buildroot}/usr/bin/
 sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=%{version}/" %{buildroot}/usr/bin/rpmmake && rm -f %{buildroot}/usr/bin/rpmmake.bkp
@@ -51,21 +33,23 @@ install -m 755 ./rpmmake-debchangelog %{buildroot}/usr/bin/
 sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=%{version}/" %{buildroot}/usr/bin/rpmmake-debchangelog && rm -f %{buildroot}/usr/bin/rpmmake-debchangelog.bkp
 sed -i".bkp" "1,/^VERSION_DATE=/s/^VERSION_DATE=.*/VERSION_DATE=%{APP_BUILD_DATE}/" %{buildroot}/usr/bin/rpmmake-debchangelog && rm -f %{buildroot}/usr/bin/rpmmake-debchangelog.bkp
 install -m 755 ./rpmmake-expect %{buildroot}/usr/bin/
-# >> install post
-# << install post
 
-
-
-
+%check
+for TEST in $(  grep -r -l -h "#\!/bin/sh" . )
+do
+		sh -n $TEST
+		if  [ $? != 0 ]; then
+			echo "syntax error in $TEST, exiting.." 
+			exit 1
+		fi
+done 
 
 
 %files
 %defattr(-,root,root,-)
-# >> files
 %{_bindir}/rpmmake
 %{_bindir}/rpmmake-changelog
 %{_bindir}/rpmmake-debchangelog
 %{_bindir}/rpmmake-expect
-# << files
 
 
