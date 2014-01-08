@@ -186,9 +186,15 @@ if [ $SIGN -eq 1 ]; then
 		else
 			rpm --addsign $VERBOSE -D "_signature gpg" -D "_gpg_name $GPG_NAME" "$ENTRY"
 		fi
-	        rpm --checksig $VERBOSE "$ENTRY"
+        rpm --checksig $VERBOSE "$ENTRY"
+        if [ $? != 0 ]; then
+            echo "Signing rpms failed! "
+            echo "  Maybe the key:$GPGKEY is not imported in rpm database:"
+            echo "  gpg --export -a $GPGKEY > key.asc && rpm --import key.asc"
+            exit 1
+        fi
 	done
-	}
+	} || exit 1
 fi
 
 #verification
