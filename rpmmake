@@ -1,17 +1,17 @@
 #!/bin/sh -e
-#rpmmake - fast script to create rpm package inside the git repo without being root - https://github.com/safrm/rpmmake 
+#rpmmake - fast script to create rpm package inside the git repo without being root - http://safrm.net/projects/rpmmake  
 #author: Miroslav Safr <miroslav.safr@gmail.com>
 #
 #usage1: <my-project>$ rpmmake  ................... builds rpms from <my-project>/<my-project>.spec in <my-project>/rpm rootdir 
 #                                                   requires <my-project>/<my-project>.spec and tags as x.y.z
 #usage2: rpmmake  /<my-path>/<my-project> ......... builds rpms from /<my-path>/<my-project>/<my-project>.spec in /<my-path>/<my-project>/rpm rootdir
 #usage3: <some-other-name>$ rpmmake -b <my-project> ...... project name is taken from argument <my-project> instead of directory name
-VERSION=NA                                                                   
+VERSION=NA
 VERSION_DATE=NA
 
 usage() {
     echo "usage: `basename $0` [<path_to_project_git_dir>] [-b <basename>] "
-    echo "fast script to create rpm package inside the git repo without being root - https://github.com/safrm/rpmmake"
+    echo "fast script to create rpm package inside the git repo without being root - http://safrm.net/projects/rpmmake"
     echo ""
     echo "<path_to_project_git_dir>  path to git directory (empty uses current directory)"
     echo "args:"

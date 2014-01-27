@@ -1,11 +1,12 @@
 #!/bin/sh
-#rpmmake-changelog - generates deb changelog from git log - https://github.com/safrm/rpmmake
-VERSION=NA                                                                   
+#rpmmake-changelog - generates deb changelog from git log - http://safrm.net/projects/rpmmake
+#author: Miroslav Safr <miroslav.safr@gmail.com>
+VERSION=NA
 VERSION_DATE=NA
 
 usage() {
     echo "usage: `basename $0` [-b <basename>] [-t <no_last_tags] [-a <my-message>]" 
-    echo "fast script to create deb changelog from git log - https://github.com/safrm/rpmmake"
+    echo "fast script to create deb changelog from git log - http://safrm.net/projects/rpmmake"
     echo ""
     echo "args:"
     echo "  -b  | --basename                   project name is taken from argument <my-project> instead of directory name"
@@ -17,7 +18,7 @@ usage() {
     echo ""
     echo "rpmmake: ${VERSION} ${VERSION_DATE}"
 }
-                                                                  
+
 TAGS_COUNT=6 #default to limit size
 APPEND_LINE=""
 while [ $# -gt 0 ]; do
