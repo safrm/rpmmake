@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<refentry id="rpmmake-debchangelog.1">
+
+<refentryinfo>
+    <title>Generates debian changelog from git log</title>
+    <author>
+        <personname><firstname>Miroslav</firstname><surname>Safr</surname></personname>
+        <email>miroslav.safr@gmail.com</email>
+        <personblurb><para>Author and maintainer</para></personblurb>
+    </author>
+    <date>2013-02-03</date>
+    <productnumber>NA</productnumber>
+    <productname>rpmmake</productname>
+</refentryinfo>
+
+<refmeta>
+    <refentrytitle>rpmmake-debchangelog</refentrytitle>
+	<manvolnum>1</manvolnum>
+</refmeta>
+
+
+<refnamediv>
+    <refname>rpmmake-debchangelog</refname>
+    <refpurpose>Generates debian changelog from git log</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+	<cmdsynopsis>
+        <command>rpmmake-debchangelog [OPTIONS]</command>
+        <arg choice="opt">-b   --basename &lt;my-project&gt;</arg>
+        <arg choice="opt">-t   --tags &lt;N&gt;</arg>
+        <arg choice="opt">-d   --distro &lt;distro-name&gt;</arg>
+        <arg choice="opt">-sv  --set-version &lt;my-version&gt;</arg>
+        <arg choice="opt">-a   --append-line &lt;my-message&gt;</arg>
+        <arg choice="opt">-V   --version</arg>
+        <arg choice="opt">-h   --help</arg>
+	</cmdsynopsis>
+</refsynopsisdiv>
+
+  <refsect1><title>DESCRIPTION</title>
+    <para>
+       Generates rpm changelog &lt;basename&gt;.changes file from git log. 
+    </para>
+  </refsect1>
+
+  <refsect1>
+    <title>OPTIONS</title>
+
+    <variablelist>
+     <varlistentry><term>-b   --basename &lt;my-project&gt;</term>
+        <listitem>
+          <para>
+            Project name is taken from argument &lt;my-project&gt; instead of directory name.
+          </para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry><term>-t  --tags &lt;N&gt;</term>
+        <listitem>
+          <para>
+            Amount of last tags to generate changelog from.  (default 6)
+          </para>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry><term>-d   --distro &lt;distro-name&gt;</term>
+        <listitem>
+          <para>
+            Use specific distro name (default is unstable).
+          </para>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry><term>-sv  --set-version &lt;my-version&gt;</term>
+        <listitem>
+          <para>
+            Project version is taken from argument &lt;my-version&gt; instead of git tag.
+          </para>
+        </listitem>
+      </varlistentry>
+           
+      <varlistentry><term>-a   --append-line &lt;my-message&gt;</term>
+        <listitem>
+          <para>
+            Appended last line. For example: (more info on http..).
+          </para>
+        </listitem>
+      </varlistentry>
+                     
+      <varlistentry><term>-V   --version</term>
+        <listitem>
+          <para>
+             Prints version of scripts.
+          </para>
+        </listitem>
+      </varlistentry>
+              
+      <varlistentry><term>-h --help</term>
+        <listitem>
+          <para>
+            Print help text to the screen.
+          </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    
+  </refsect1>
+  <refsect1>
+    <title>PROJECT_DIR</title>
+    <para>
+      Root directory for building. Should have the same name as project and contain project.spec (otherwise -b).
+      When it is not specified it takes current directory.
+    </para>
+  </refsect1>
+
+  <refsect1><title>SEE ALSO</title>
+    <para>
+      rpmmake(1), rpmmake-changelog(1), rpmmake-expect(1).
+      <ulink url="http://safrm.net/projects/rpmmake/"/>
+    </para>
+  </refsect1>
+
+  <refsect1><title>AUTHOR</title>
+    Miroslav Šafr &lt;miroslav.safr@gmail.com&gt;
+  </refsect1>
+  <refsect1><title>LICENSE</title>
+   LGPL2
+  </refsect1>
+</refentry>

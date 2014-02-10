@@ -1,5 +1,5 @@
 #!/bin/sh
-#rpmmake - fast script to create rpm package inside the git repo without being root - http://safrm.net/projects/rpmmake  
+#rpmmake - fast way to create rpm package inside the git repo without being root - http://safrm.net/projects/rpmmake  
 #author: Miroslav Safr <miroslav.safr@gmail.com>
 #
 #usage1: <my-project>$ rpmmake  ................... builds rpms from <my-project>/<my-project>.spec in <my-project>/rpm rootdir 
@@ -9,27 +9,30 @@
 VERSION=NA
 VERSION_DATE=NA
 
+#support color escape characters on different terminals
+alias echo="/bin/echo -e"
+BASENAME=`basename $0`
+
 usage() {
-    echo "usage: `basename $0` [<path_to_project_git_dir>] [-b <basename>] "
-    echo "fast script to create rpm package inside the git repo without being root - http://safrm.net/projects/rpmmake"
-    echo ""
-    echo "<path_to_project_git_dir>  path to git directory (empty uses current directory)"
-    echo "args:"
-    echo "  -b  | --basename <my-project>    project name is taken from argument <my-project> instead of directory name"
-    echo "  -sv | --set-version <my-version> project version is taken from argument <my-version> instead of git tag"
-    echo "  -sr | --set-release <my-release> project release is taken from argument <my-release> instead of spec file"
-    echo "  -sp | --spec-version             prefer version from spec file over git tag"
-    echo "  -gn | --gpg-name <gpg-name>      set custom gpg name for signing by name"
-    echo "  -gk | --gpg-key <gpg-key>        set custom gpg name for signing by key"                
-    echo "  -ns | --nosign                   do not sign the package"
-    echo "  -ne | --noexpect                 do not use expect to enter passphrase"
-    echo "  -nv | --noverify                 do not run package verification"
-    echo "  -pp | --passphrase <passphrase>  pass passphrase or use export PASSPHRASE=<pp>"
-    echo "  -v  | --verbose                  prints more output"
-    echo "  -V  | --version                  prints version of scripts"
-    echo "  -h  | --help                     prints this help"
-    echo ""
-    echo "rpmmake: ${VERSION} ${VERSION_DATE}"
+    echo "$BASENAME ${VERSION} - fast script to create rpm package inside the git repo without being root"
+    echo " http://safrm.net/projects/rpmmake/"
+    echo "Usage:$BASENAME  [<path_to_project_git_dir>] [OPTIONS]"
+    echo " <path_to_project_git_dir>  path to git directory (empty uses current directory)"
+    echo "OPTIONS:"
+    echo "  -b   --basename <my-project> .... project name is taken from argument <my-project> instead of directory name"
+    echo "  -sv  --set-version <my-version> . project version is taken from argument <my-version> instead of git tag"
+    echo "  -sr  --set-release <my-release> . project release is taken from argument <my-release> instead of spec file"
+    echo "  -sp  --spec-version ............. prefer version from spec file over git tag"
+    echo "  -gn  --gpg-name <gpg-name> ...... set custom gpg name for signing by name"
+    echo "  -gk  --gpg-key <gpg-key> ........ set custom gpg name for signing by key"                
+    echo "  -ns  --nosign ................... do not sign the package"
+    echo "  -ne  --noexpect ................. do not use expect to enter passphrase"
+    echo "  -nv  --noverify ................. do not run package verification"
+    echo "  -pp  --passphrase <passphrase> .. pass passphrase or use export PASSPHRASE=<pp>"
+    echo "  -eo  --extra-build-options <opt>  pass extra build options to rpmbuild"
+    echo "  -v   --verbose .................. prints more output"
+    echo "  -V   --version .................. prints version of scripts"
+    echo "  -h   --help ..................... prints this help"
 }
 SIGN=1
 VERIFY=1
@@ -70,17 +73,20 @@ while [ $# -gt 0 ]; do
     -pp | --passphrase) shift
               export PASSPHRASE=$1
                ;;
+    -eo | --extra-build-options) shift
+              EXTRA_BUILD_OPTIONS="$EXTRA_BUILD_OPTIONS $1"
+              ;;
     -v | --verbose)
-		VERBOSE="--verbose"
-		;;
-    -V | --version) echo "`basename $0` ${VERSION} ${VERSION_DATE}"
-                  exit 0
-                  ;;  
+		      VERBOSE="--verbose"
+              ;;
+    -V | --version) echo "$BASENAME ${VERSION} ${VERSION_DATE}"
+              exit 0
+              ;;  
     -h | --help ) usage 
-		  exit 0
-                  ;;
+              exit 0
+              ;; 
 	* )       ORIG_PWD_DIR=`pwd`; cd $1   #from different directory
-			   ;; 
+		      ;; 
   esac
   shift
 done
@@ -163,7 +169,7 @@ fi
 #%_signature     gpg
 #%_gpg_name      name or key
 
-rpmbuild -ba ./rpm/SOURCES/$BASENAME-$RPM_VERSION.spec --define="_topdir $PWD/rpm" $VERBOSE 
+rpmbuild -ba ./rpm/SOURCES/$BASENAME-$RPM_VERSION.spec --define="_topdir $PWD/rpm" $VERBOSE $EXTRA_BUILD_OPTIONS
 if [ $? != 0 ]; then
    echo "rpmbuild failed, exiting..."
    exit 1

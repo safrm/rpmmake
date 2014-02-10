@@ -4,18 +4,22 @@
 VERSION=NA
 VERSION_DATE=NA
 
+#support color escape characters on different terminals
+alias echo="/bin/echo -e"
+BASENAME=`basename $0`
+
 usage() {
-    echo "usage: `basename $0` [-b <basename>] [-t <no_last_tags] [-a <my-message>]" 
-    echo "fast script to create rpm changelog from git log - http://safrm.net/projects/rpmmake"
+    echo "$BASENAME ${VERSION} - fast script to create rpm changelog from git log"
+    echo " http://safrm.net/projects/rpmmake/"
+    echo "Usage:$BASENAME [OPTIONS] ... [PROJECT_DIR]"
+    echo "OPTIONS:"
+    echo "  -b   --basename <my-project> .... project name is taken from argument <my-project> instead of directory name"
+    echo "  -t   --tags <N> ................. amount of last tags to generate changelog from  (default 6)"
+    echo "  -sv  --set-version <version> .... sets latest changelog version"
+    echo "  -a   --append-line <my-message> . appended last line (more info on http..)"
+    echo "  -V   --version .................. prints version of scripts"
+    echo "  -h   --help ..................... prints this help"
     echo ""
-    echo "args:"
-    echo "  -b  | --basename                   project name is taken from argument <my-project> instead of directory name"
-    echo "  -t  | --tags                       amount of last tags to generate changelog from"
-    echo "  -sv | --set-version <version>      sets latest changelog version"
-    echo "  -a  | --append-line <my-message>   appended last line (more info on http..)"
-    echo "  -h  | --help                       prints this help"
-    echo ""
-    echo "rpmmake: ${VERSION} ${VERSION_DATE}"
 }
 
 TAGS_COUNT=6 #default to limit size
@@ -37,6 +41,9 @@ while [ $# -gt 0 ]; do
     -V | --version)    echo "`basename $0`  ${VERSION} ${VERSION_DATE}"
                   exit 0
                   ;;  
+    -h | --help ) usage 
+              exit 0
+              ;;                   
 	* )       PWD_DIR=$PWD; cd $1   #from different directory
 		  ;; 
   esac

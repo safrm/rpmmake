@@ -6,3 +6,4 @@ debian/rpmmake/*
 rpm/*
 *.changes
 *~
+doc/tmp/*

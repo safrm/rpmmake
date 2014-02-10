@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<refentry id="rpmmake.1">
+
+<refentryinfo>
+    <title>Fast way to create rpm package inside the git repo without being root</title>
+    <author>
+        <personname><firstname>Miroslav</firstname><surname>Safr</surname></personname>
+        <email>miroslav.safr@gmail.com</email>
+        <personblurb><para>Author and maintainer</para></personblurb>
+    </author>
+    <date>2013-02-03</date>
+    <productnumber>NA</productnumber>
+    <productname>rpmmake</productname>
+</refentryinfo>
+
+<refmeta>
+    <refentrytitle>rpmmake</refentrytitle>
+	<manvolnum>1</manvolnum>
+</refmeta>
+
+
+<refnamediv>
+    <refname>rpmmake</refname>
+    <refpurpose>Fast way to create rpm package inside the git repo without being root</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+	<cmdsynopsis>
+        <command>rpmmake [&lt;path_to_project_git_dir&gt;] [OPTIONS]</command>
+        <arg choice="opt">-b   --basename &lt;my-project&gt;</arg>
+        <arg choice="opt">-sv  --set-version &lt;my-version&gt;</arg>
+        <arg choice="opt">-sr  --set-release &lt;my-release&gt;</arg>
+        <arg choice="opt">-sp  --spec-version</arg>
+        <arg choice="opt">-gn  --gpg-name &lt;gpg-name&gt;</arg>
+        <arg choice="opt">-gk  --gpg-key &lt;gpg-key&gt;</arg>
+        <arg choice="opt">-ns  --nosign</arg>
+        <arg choice="opt">-ne  --noexpect</arg>
+        <arg choice="opt">-nv  --noverify</arg>
+        <arg choice="opt">-pp  --passphrase &lt;passphrase&gt;</arg>
+        <arg choice="opt">-eo  --extra-build-options &lt;opt&gt;</arg>
+        <arg choice="opt">-v   --verbose</arg>
+        <arg choice="opt">-V   --version</arg>
+        <arg choice="opt">-h   --help</arg>
+	</cmdsynopsis>
+</refsynopsisdiv>
+
+  <refsect1><title>DESCRIPTION</title>
+    <para>
+       Fast way to create rpm package inside the git repo without being root and maintain rpm-based releases. 
+       git clone &lt;project&gt;
+       rpmmake 
+       publish rpm packages
+    </para>
+  </refsect1>
+
+  <refsect1>
+    <title>OPTIONS</title>
+
+    <variablelist>
+     <varlistentry><term>-b   --basename &lt;my-project&gt;</term>
+        <listitem>
+          <para>
+            Project name is taken from argument &lt;my-project&gt; instead of directory name.
+          </para>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry><term>-sv  --set-version &lt;my-version&gt;</term>
+        <listitem>
+          <para>
+            Project version is taken from argument &lt;my-version&gt; instead of git tag.
+          </para>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry><term>-sr  --set-release &lt;my-release&gt;</term>
+        <listitem>
+          <para>
+            Project release is taken from argument &lt;my-release&gt; instead of spec file.
+          </para>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry><term>-sp  --spec-version</term>
+        <listitem>
+          <para>
+            Prefer version from spec file over git tag.
+          </para>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry><term>-gn  --gpg-name &lt;gpg-name&gt;</term>
+        <listitem>
+          <para>
+            Set custom gpg name for signing by name.
+          </para>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry><term>-gk  --gpg-key &lt;gpg-key&gt;</term>
+        <listitem>
+          <para>
+            Set custom gpg name for signing by key.
+          </para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry><term>-ns  --nosign</term>
+        <listitem>
+          <para>
+            Do not sign the package.
+          </para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry><term>-ne  --noexpect</term>
+        <listitem>
+          <para>
+            Do not use expect to enter passphrase for signing. has to be entered manually.
+          </para>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry><term>-nv  --noverify</term>
+        <listitem>
+          <para>
+            Do not run package verification.
+          </para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry><term>-pp  --passphrase &lt;passphrase&gt;</term>
+        <listitem>
+          <para>
+            Pass passphrase by argumet or use export PASSPHRASE=&lt;passphrase&gt;.
+          </para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry><term>-eo  --extra-build-options &lt;opt&gt;</term>
+        <listitem>
+          <para>
+            Pass extra build options to rpmbuild. Can contain multiple arguments.
+            Example: --target=ARM6 --nodeps
+          </para>
+        </listitem>
+      </varlistentry>
+      
+      <varlistentry><term>-v   --verbose</term>
+        <listitem>
+          <para>
+             Prints more output.
+          </para>
+        </listitem>
+      </varlistentry>
+                     
+      <varlistentry><term>-V   --version</term>
+        <listitem>
+          <para>
+             Prints version of scripts.
+          </para>
+        </listitem>
+      </varlistentry>
+              
+      <varlistentry><term>-h --help</term>
+        <listitem>
+          <para>
+            Print help text to the screen.
+          </para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    
+  </refsect1>
+  <refsect1>
+    <title>path_to_project_git_dir</title>
+    <para>
+      Root directory for building.Should have the same name as project and contain project.spec (otherwise -b).
+      when it is not specified it takes current directory.
+    </para>
+  </refsect1>
+
+  <refsect1><title>SEE ALSO</title>
+    <para>
+      rpmmake-changelog(1), rpmmake-debchangelog(1), rpmmake-expect(1).
+      <ulink url="http://safrm.net/projects/rpmmake/"/>
+    </para>
+  </refsect1>
+
+  <refsect1><title>AUTHOR</title>
+    Miroslav Šafr &lt;miroslav.safr@gmail.com&gt;
+  </refsect1>
+  <refsect1><title>LICENSE</title>
+   LGPL2
+  </refsect1>
+</refentry>

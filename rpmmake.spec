@@ -14,6 +14,9 @@ Autoreq: on
 Autoreqprov: on
 Requires:  expect
 Requires:  rpm-sign
+BuildRequires:  xsltproc
+BuildRequires:  docbook-xsl
+
 %description
 Fast script to create rpm package inside the git repo without beeing root 
 
@@ -21,6 +24,7 @@ Fast script to create rpm package inside the git repo without beeing root
 %setup -c -n ./%{name}-%{version}
 
 %build
+cd doc && ./update_docs.sh && cd -
 
 %install
 mkdir -p %{buildroot}/usr/bin
@@ -34,6 +38,15 @@ install -m 755 ./rpmmake-debchangelog %{buildroot}/usr/bin/
 sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=%{version}/" %{buildroot}/usr/bin/rpmmake-debchangelog && rm -f %{buildroot}/usr/bin/rpmmake-debchangelog.bkp
 sed -i".bkp" "1,/^VERSION_DATE=/s/^VERSION_DATE=.*/VERSION_DATE=%{APP_BUILD_DATE}/" %{buildroot}/usr/bin/rpmmake-debchangelog && rm -f %{buildroot}/usr/bin/rpmmake-debchangelog.bkp
 install -m 755 ./rpmmake-expect %{buildroot}/usr/bin/
+
+#documentation
+MANPAGES=`find ./doc/manpages -type f`
+install -d -m 755 %{buildroot}%{_mandir}/man1
+install -m 644 $MANPAGES %{buildroot}%{_mandir}/man1
+
+DOCS="./README ./LICENSE.LGPL"
+install -d -m 755 %{buildroot}%{_docdir}/rpmmake
+install -m 644 $DOCS %{buildroot}%{_docdir}/rpmmake
 
 %check
 for TEST in $(  grep -r -l -h "#\!/bin/sh" . )
@@ -53,4 +66,13 @@ done
 %{_bindir}/rpmmake-debchangelog
 %{_bindir}/rpmmake-expect
 
+#man pages
+%{_mandir}/man1/rpmmake.1*
+%{_mandir}/man1/rpmmake-changelog.1*
+%{_mandir}/man1/rpmmake-debchangelog.1*
+%{_mandir}/man1/rpmmake-expect.1*
+
+#other docs
+%{_docdir}/rpmmake/README
+%{_docdir}/rpmmake/LICENSE.LGPL
 

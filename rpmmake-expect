@@ -1,5 +1,5 @@
 #!/usr/bin/expect
-#rpmmake - fast script to create rpm package inside the git repo without being root - http://safrm.net/projects/rpmmake
+#rpmmake - fast way to create rpm package inside the git repo without being root - http://safrm.net/projects/rpmmake
 #author: Miroslav Safr <miroslav.safr@gmail.com>
 # if you want to use non-empty pasphrase pass it by environmentall variable PASSPHRASE
 #
