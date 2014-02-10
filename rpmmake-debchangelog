@@ -6,12 +6,12 @@ VERSION_DATE=NA
 
 #support color escape characters on different terminals
 alias echo="/bin/echo -e"
-BASENAME=`basename $0`
+RPMMAKE_DCHL=`basename $0`
 
 usage() {
-    echo "$BASENAME ${VERSION} - fast script to create debian changelog from git log"
+    echo "$RPMMAKE_DCHL ${VERSION} - fast script to create debian changelog from git log"
     echo " http://safrm.net/projects/rpmmake/"
-    echo "Usage:$BASENAME [OPTIONS] ... [PROJECT_DIR]"
+    echo "Usage:$RPMMAKE_DCHL [OPTIONS] ... [PROJECT_DIR]"
     echo "OPTIONS:"
     echo "  -b   --basename <my-project> .... project name is taken from argument <my-project> instead of directory name"
     echo "  -t   --tags <N> ................. amount of last tags to generate changelog from (default 6)"
@@ -42,7 +42,7 @@ while [ $# -gt 0 ]; do
     -a | --append-line) shift
 	                APPEND_LINE=$1
                         ;;
-    -V | --version)    echo "`basename $0`  ${VERSION} ${VERSION_DATE}"
+    -V | --version)    echo "$RPMMAKE_DCHL  ${VERSION} ${VERSION_DATE}"
                   exit 0
                   ;;  
     -h | --help ) usage 

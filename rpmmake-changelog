@@ -6,12 +6,12 @@ VERSION_DATE=NA
 
 #support color escape characters on different terminals
 alias echo="/bin/echo -e"
-BASENAME=`basename $0`
+RPMMAKE_CHL=`basename $0`
 
 usage() {
-    echo "$BASENAME ${VERSION} - fast script to create rpm changelog from git log"
+    echo "$RPMMAKE_CHL ${VERSION} - fast script to create rpm changelog from git log"
     echo " http://safrm.net/projects/rpmmake/"
-    echo "Usage:$BASENAME [OPTIONS] ... [PROJECT_DIR]"
+    echo "Usage:$RPMMAKE_CHL [OPTIONS] ... [PROJECT_DIR]"
     echo "OPTIONS:"
     echo "  -b   --basename <my-project> .... project name is taken from argument <my-project> instead of directory name"
     echo "  -t   --tags <N> ................. amount of last tags to generate changelog from  (default 6)"
@@ -38,7 +38,7 @@ while [ $# -gt 0 ]; do
     -sv|--set-version) shift
                RPM_VERSION=$1           #custom version
 			   ;;
-    -V | --version)    echo "`basename $0`  ${VERSION} ${VERSION_DATE}"
+    -V | --version)    echo "$RPMMAKE_CHL  ${VERSION} ${VERSION_DATE}"
                   exit 0
                   ;;  
     -h | --help ) usage 

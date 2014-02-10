@@ -11,12 +11,12 @@ VERSION_DATE=NA
 
 #support color escape characters on different terminals
 alias echo="/bin/echo -e"
-BASENAME=`basename $0`
+RPMMAKE=`basename $0`
 
 usage() {
-    echo "$BASENAME ${VERSION} - fast script to create rpm package inside the git repo without being root"
+    echo "$RPMMAKE ${VERSION} - fast script to create rpm package inside the git repo without being root"
     echo " http://safrm.net/projects/rpmmake/"
-    echo "Usage:$BASENAME  [<path_to_project_git_dir>] [OPTIONS]"
+    echo "Usage:$RPMMAKE  [<path_to_project_git_dir>] [OPTIONS]"
     echo " <path_to_project_git_dir>  path to git directory (empty uses current directory)"
     echo "OPTIONS:"
     echo "  -b   --basename <my-project> .... project name is taken from argument <my-project> instead of directory name"
@@ -79,7 +79,7 @@ while [ $# -gt 0 ]; do
     -v | --verbose)
 		      VERBOSE="--verbose"
               ;;
-    -V | --version) echo "$BASENAME ${VERSION} ${VERSION_DATE}"
+    -V | --version) echo "$RPMMAKE ${VERSION} ${VERSION_DATE}"
               exit 0
               ;;  
     -h | --help ) usage 
