@@ -1,0 +1,45 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>rpmmake</title><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" title="rpmmake"><a name="rpmmake.1"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>rpmmake &#8212; Fast way to create rpm package inside the git repo without being root</p></div><div class="refsynopsisdiv" title="Synopsis"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">rpmmake [&lt;path_to_project_git_dir&gt;] [OPTIONS]</code>  [-b   --basename &lt;my-project&gt;] [-sv  --set-version &lt;my-version&gt;] [-sr  --set-release &lt;my-release&gt;] [-sp  --spec-version] [-gn  --gpg-name &lt;gpg-name&gt;] [-gk  --gpg-key &lt;gpg-key&gt;] [-ns  --nosign] [-ne  --noexpect] [-nv  --noverify] [-pp  --passphrase &lt;passphrase&gt;] [-eo  --extra-build-options &lt;opt&gt;] [-v   --verbose] [-V   --version] [-h   --help]</p></div></div><div class="refsect1" title="DESCRIPTION"><a name="idp44808"></a><h2>DESCRIPTION</h2><p>
+       Fast way to create rpm package inside the git repo without being root and maintain rpm-based releases. 
+       git clone &lt;project&gt;
+       rpmmake 
+       publish rpm packages
+    </p></div><div class="refsect1" title="OPTIONS"><a name="idp45592"></a><h2>OPTIONS</h2><div class="variablelist"><dl><dt><span class="term">-b   --basename &lt;my-project&gt;</span></dt><dd><p>
+            Project name is taken from argument &lt;my-project&gt; instead of directory name.
+          </p></dd><dt><span class="term">-sv  --set-version &lt;my-version&gt;</span></dt><dd><p>
+            Project version is taken from argument &lt;my-version&gt; instead of git tag.
+          </p></dd><dt><span class="term">-sr  --set-release &lt;my-release&gt;</span></dt><dd><p>
+            Project release is taken from argument &lt;my-release&gt; instead of spec file.
+          </p></dd><dt><span class="term">-sp  --spec-version</span></dt><dd><p>
+            Prefer version from spec file over git tag.
+          </p></dd><dt><span class="term">-gn  --gpg-name &lt;gpg-name&gt;</span></dt><dd><p>
+            Set custom gpg name for signing by name.
+          </p></dd><dt><span class="term">-gk  --gpg-key &lt;gpg-key&gt;</span></dt><dd><p>
+            Set custom gpg name for signing by key.
+          </p></dd><dt><span class="term">-ns  --nosign</span></dt><dd><p>
+            Do not sign the package.
+          </p></dd><dt><span class="term">-ne  --noexpect</span></dt><dd><p>
+            Do not use expect to enter passphrase for signing. has to be entered manually.
+          </p></dd><dt><span class="term">-nv  --noverify</span></dt><dd><p>
+            Do not run package verification.
+          </p></dd><dt><span class="term">-pp  --passphrase &lt;passphrase&gt;</span></dt><dd><p>
+            Pass passphrase by argumet or use export PASSPHRASE=&lt;passphrase&gt;.
+          </p></dd><dt><span class="term">-eo  --extra-build-options &lt;opt&gt;</span></dt><dd><p>
+            Pass extra build options to rpmbuild. Can contain multiple arguments.
+            Example: --target=ARM6 --nodeps
+          </p></dd><dt><span class="term">-v   --verbose</span></dt><dd><p>
+             Prints more output.
+          </p></dd><dt><span class="term">-V   --version</span></dt><dd><p>
+             Prints version of scripts.
+          </p></dd><dt><span class="term">-h --help</span></dt><dd><p>
+            Print help text to the screen.
+          </p></dd></dl></div></div><div class="refsect1" title="path_to_project_git_dir"><a name="idp57520"></a><h2>path_to_project_git_dir</h2><p>
+      Root directory for building.Should have the same name as project and contain project.spec (otherwise -b).
+      when it is not specified it takes current directory.
+    </p></div><div class="refsect1" title="SEE ALSO"><a name="idp58280"></a><h2>SEE ALSO</h2><p>
+      rpmmake-changelog(1), rpmmake-debchangelog(1), rpmmake-expect(1).
+      <a class="ulink" href="http://safrm.net/projects/rpmmake/" target="_top">http://safrm.net/projects/rpmmake/</a>
+    </p></div><div class="refsect1" title="AUTHOR"><a name="idp59168"></a><h2>AUTHOR</h2>
+    Miroslav &#352;afr &lt;miroslav.safr@gmail.com&gt;
+  </div><div class="refsect1" title="LICENSE"><a name="idp59624"></a><h2>LICENSE</h2>
+   LGPL2
+  </div></div></body></html>

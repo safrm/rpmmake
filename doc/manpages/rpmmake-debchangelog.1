@@ -1,0 +1,92 @@
+'\" t
+.\"     Title: rpmmake-debchangelog
+.\"    Author: Miroslav Safr <miroslav.safr@gmail.com>
+.\" Generator: DocBook XSL Stylesheets v1.76.1 <http://docbook.sf.net/>
+.\"      Date: 20140210_1301
+.\"    Manual: Generates debian changelog from git log
+.\"    Source: rpmmake 1.0.16
+.\"  Language: English
+.\"
+.TH "RPMMAKE\-DEBCHANGELO" "1" "20140210_1301" "rpmmake 1.0.16" "Generates debian changelog fro"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+rpmmake-debchangelog \- Generates debian changelog from git log
+.SH "SYNOPSIS"
+.HP \w'\fBrpmmake\-debchangelog\ [OPTIONS]\fR\ 'u
+\fBrpmmake\-debchangelog [OPTIONS]\fR [\-b\ \-\-basename\ <my\-project>] [\-t\ \-\-tags\ <N>] [\-d\ \-\-distro\ <distro\-name>] [\-sv\ \-\-set\-version\ <my\-version>] [\-a\ \-\-append\-line\ <my\-message>] [\-V\ \-\-version] [\-h\ \-\-help]
+.SH "DESCRIPTION"
+.PP
+Generates rpm changelog <basename>\&.changes file from git log\&.
+.SH "OPTIONS"
+.PP
+\-b \-\-basename <my\-project>
+.RS 4
+Project name is taken from argument <my\-project> instead of directory name\&.
+.RE
+.PP
+\-t \-\-tags <N>
+.RS 4
+Amount of last tags to generate changelog from\&. (default 6)
+.RE
+.PP
+\-d \-\-distro <distro\-name>
+.RS 4
+Use specific distro name (default is unstable)\&.
+.RE
+.PP
+\-sv \-\-set\-version <my\-version>
+.RS 4
+Project version is taken from argument <my\-version> instead of git tag\&.
+.RE
+.PP
+\-a \-\-append\-line <my\-message>
+.RS 4
+Appended last line\&. For example: (more info on http\&.\&.)\&.
+.RE
+.PP
+\-V \-\-version
+.RS 4
+Prints version of scripts\&.
+.RE
+.PP
+\-h \-\-help
+.RS 4
+Print help text to the screen\&.
+.RE
+.SH "PROJECT_DIR"
+.PP
+Root directory for building\&. Should have the same name as project and contain project\&.spec (otherwise \-b)\&. When it is not specified it takes current directory\&.
+.SH "SEE ALSO"
+.PP
+rpmmake(1), rpmmake\-changelog(1), rpmmake\-expect(1)\&.
+\m[blue]\fB\%http://safrm.net/projects/rpmmake/\fR\m[]
+.SH "AUTHOR"
+
+    Miroslav Šafr <miroslav\&.safr@gmail\&.com>
+  .SH "LICENSE"
+
+   LGPL2
+  .SH "AUTHOR"
+.PP
+\fBMiroslav Safr\fR <\&miroslav\&.safr@gmail\&.com\&>
+.RS 4
+Author and maintainer
+.RE

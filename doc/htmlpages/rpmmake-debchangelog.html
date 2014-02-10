@@ -1,0 +1,27 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>rpmmake-debchangelog</title><meta name="generator" content="DocBook XSL Stylesheets V1.76.1"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="refentry" title="rpmmake-debchangelog"><a name="rpmmake-debchangelog.1"></a><div class="titlepage"></div><div class="refnamediv"><h2>Name</h2><p>rpmmake-debchangelog &#8212; Generates debian changelog from git log</p></div><div class="refsynopsisdiv" title="Synopsis"><h2>Synopsis</h2><div class="cmdsynopsis"><p><code class="command">rpmmake-debchangelog [OPTIONS]</code>  [-b   --basename &lt;my-project&gt;] [-t   --tags &lt;N&gt;] [-d   --distro &lt;distro-name&gt;] [-sv  --set-version &lt;my-version&gt;] [-a   --append-line &lt;my-message&gt;] [-V   --version] [-h   --help]</p></div></div><div class="refsect1" title="DESCRIPTION"><a name="idp42464"></a><h2>DESCRIPTION</h2><p>
+       Generates rpm changelog &lt;basename&gt;.changes file from git log. 
+    </p></div><div class="refsect1" title="OPTIONS"><a name="idp43184"></a><h2>OPTIONS</h2><div class="variablelist"><dl><dt><span class="term">-b   --basename &lt;my-project&gt;</span></dt><dd><p>
+            Project name is taken from argument &lt;my-project&gt; instead of directory name.
+          </p></dd><dt><span class="term">-t  --tags &lt;N&gt;</span></dt><dd><p>
+            Amount of last tags to generate changelog from.  (default 6)
+          </p></dd><dt><span class="term">-d   --distro &lt;distro-name&gt;</span></dt><dd><p>
+            Use specific distro name (default is unstable).
+          </p></dd><dt><span class="term">-sv  --set-version &lt;my-version&gt;</span></dt><dd><p>
+            Project version is taken from argument &lt;my-version&gt; instead of git tag.
+          </p></dd><dt><span class="term">-a   --append-line &lt;my-message&gt;</span></dt><dd><p>
+            Appended last line. For example: (more info on http..).
+          </p></dd><dt><span class="term">-V   --version</span></dt><dd><p>
+             Prints version of scripts.
+          </p></dd><dt><span class="term">-h --help</span></dt><dd><p>
+            Print help text to the screen.
+          </p></dd></dl></div></div><div class="refsect1" title="PROJECT_DIR"><a name="idp3496"></a><h2>PROJECT_DIR</h2><p>
+      Root directory for building. Should have the same name as project and contain project.spec (otherwise -b).
+      When it is not specified it takes current directory.
+    </p></div><div class="refsect1" title="SEE ALSO"><a name="idp4256"></a><h2>SEE ALSO</h2><p>
+      rpmmake(1), rpmmake-changelog(1), rpmmake-expect(1).
+      <a class="ulink" href="http://safrm.net/projects/rpmmake/" target="_top">http://safrm.net/projects/rpmmake/</a>
+    </p></div><div class="refsect1" title="AUTHOR"><a name="idp63944"></a><h2>AUTHOR</h2>
+    Miroslav &#352;afr &lt;miroslav.safr@gmail.com&gt;
+  </div><div class="refsect1" title="LICENSE"><a name="idp64400"></a><h2>LICENSE</h2>
+   LGPL2
+  </div></div></body></html>
