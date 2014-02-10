@@ -2,6 +2,8 @@
 #fast script to create rpm package inside the git repo without being root  - http://safrm.net/projects/rpmmake
 #author:  Miroslav Safr <miroslav.safr@gmail.com>
 BINDIR=/usr/bin
+DOCDIR=/usr/share/doc
+MANDIR=/usr/share/man
 
 #root check
 USERID=`id -u`
@@ -33,3 +35,12 @@ install -m 0777 -v ./rpmmake-debchangelog  $BINDIR/
 sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=$APP_FULL_VERSION_TAG/" $BINDIR/rpmmake-debchangelog && rm -f $BINDIR/rpmmake-debchangelog.bkp
 sed -i".bkp" "1,/^VERSION_DATE=/s/^VERSION_DATE=.*/VERSION_DATE=$APP_BUILD_DATE/" $BINDIR/rpmmake-debchangelog && rm -f $BINDIR/rpmmake-debchangelog.bkp
 install -m 0777 -v ./rpmmake-expect  $BINDIR/
+
+MANPAGES=`find ./doc/manpages -type f`
+install -d -m 755 $MANDIR/man1
+install -m 644 $MANPAGES $MANDIR/man1
+
+DOCS="./README ./LICENSE.LGPL"
+install -d -m 755 $DOCDIR/rpmmake
+install -m 644 $DOCS $DOCDIR/rpmmake
+

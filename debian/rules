@@ -4,3 +4,7 @@ export DH_VERBOSE=1
 
 %:
 	dh  $@
+	
+override_dh_auto_build:
+	cd doc && ./update_docs.sh && cd -
+	dh_auto_build

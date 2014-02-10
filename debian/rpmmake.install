@@ -3,3 +3,7 @@ rpmmake-changelog /usr/bin/
 rpmmake-debchangelog /usr/bin/
 rpmmake-expect /usr/bin/
 
+doc/manpages/* /usr/share/man/man1/
+
+README /usr/share/doc/rpmmake
+LICENSE.LGPL /usr/share/doc/rpmmake
