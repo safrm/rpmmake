@@ -14,8 +14,11 @@ Autoreq: on
 Autoreqprov: on
 Requires:  expect
 Requires:  rpm-sign
-BuildRequires:  xsltproc
-BuildRequires:  docbook-xsl
+#BuildRequires:  xsltproc
+BuildRequires:  libxslt
+#BuildRequires:  docbook-xsl
+BuildRequires: docbook-xsl-stylesheets
+BuildRequires:  appver >= 1.1.1
 
 %description
 Fast script to create rpm package inside the git repo without beeing root 
@@ -24,7 +27,7 @@ Fast script to create rpm package inside the git repo without beeing root
 %setup -c -n ./%{name}-%{version}
 
 %build
-cd doc && ./update_docs.sh && cd -
+cd doc && ./update_docs.sh %{version} && cd -
 
 %install
 mkdir -p %{buildroot}/usr/bin

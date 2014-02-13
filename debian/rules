@@ -6,5 +6,6 @@ export DH_VERBOSE=1
 	dh  $@
 	
 override_dh_auto_build:
-	cd doc && ./update_docs.sh && cd -
+	DEBVERSION=$(dpkg-parsechangelog | sed -n -e 's/^Version: //p' &>/dev/null)
+	cd doc && ./update_docs.sh $DEBVERSION && cd -
 	dh_auto_build
