@@ -60,9 +60,9 @@ while [ $# -gt 0 ]; do
 		GPG_NAME=$1
 		;;
     -gk|--gpg-key) shift
-		GPG_KEY=$1
+		GPGKEY=$1
 		GPG_NAME=`gpg --list-keys | grep "$GPGKEY" -1 | grep uid | sed "s/uid *//"`
-		if [ -z "$GPG_NAME" ]; then echo "wrong gpg key $GPG_KEY"; exit 1; fi
+		if [ -z "$GPG_NAME" ]; then echo "wrong gpg key $GPGKEY"; exit 1; fi
 		;;
     -nv|--noverify)
                VERIFY=0
@@ -153,10 +153,10 @@ TAR_MIN_VERSION=`tar --version | head -1 |  awk -F"[ .]" ' { print   $5 }'`
 if [ $TAR_MIN_VERSION -lt 21 ]
 then
   echo "old tar $TAR_MIN_VERSION "
-  tar --exclude=.gitignore --exclude=.git/* --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* $VERBOSE -cjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
+  tar --exclude=.gitignore --exclude=.git --exclude=build --exclude=debian --exclude=*.tar.bz2 --exclude=rpm $VERBOSE -cjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
 else
   echo "new tar $TAR_MIN_VERSION "
-  tar --exclude-vcs --exclude=build/* --exclude=debian/* --exclude=*.tar.bz2 --exclude=rpm/* $VERBOSE -cjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
+  tar --exclude-vcs --exclude=build --exclude=debian --exclude=*.tar.bz2 --exclude=rpm $VERBOSE -cjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
 fi
 echo "tar ball OK"
 
@@ -180,7 +180,7 @@ cd $PWD
 if [ $SIGN -eq 1 ]; then
 	if [ -z "$GPG_NAME" ]; then 
 		GPG_NAME=`gpg --list-keys | grep "$GPGKEY" -1 | grep uid | sed "s/uid *//"`
-		echo "using default(first) gpg key $GPG_KEY"; 
+		echo "using default(first) gpg key $GPGKEY"; 
 	fi
 	PACKAGES=`find $PWD/rpm -type f -printf '%p\n' | grep -i -E -Z '\.(rpm)$'`
 	echo "${PACKAGES}" | \
