@@ -30,7 +30,7 @@ while [ $# -gt 0 ]; do
                BASENAME=$1    #clone directory has different name than project
                ;;
     -t|--tags) shift
-               TAGS_COUNT=$1   
+               TAGS_COUNT=$1
                ;;
     -a | --append-line) shift
 	                APPEND_LINE=$1
@@ -40,12 +40,12 @@ while [ $# -gt 0 ]; do
 			   ;;
     -V | --version)    echo "$RPMMAKE_CHL  ${VERSION} ${VERSION_DATE}"
                   exit 0
-                  ;;  
-    -h | --help ) usage 
+                  ;;
+    -h | --help ) usage
               exit 0
-              ;;                   
+              ;;
 	* )       PWD_DIR=$PWD; cd $1   #from different directory
-		  ;; 
+		  ;;
   esac
   shift
 done
@@ -69,39 +69,39 @@ HIGHER_TAG_HASH=
 for TAG in $TAGS
 do
   #not tagged changes
-  TAG_HASH=`git rev-list $TAG | head -n 1` 
+  TAG_HASH=`git rev-list $TAG | head -n 1`
   if [ -z "$FIRST_TAG" ]; then
         FIRST_TAG=$TAG
-		echo "first tag: $FIRST_TAG - $TAG_HASH" 
+        echo "first tag: $FIRST_TAG - $TAG_HASH"
         HEAD_VERSION_COMMITS=`git log $TAG_HASH..HEAD --pretty=format:'- %s' 2> /dev/null`
         HEAD_VERSION_TAG=`git describe --tags  --dirty=* 2> /dev/null`
         LAST_COMMIT_DATE=`git log -1 --pretty=format:'%ad' | awk '{print $1,$2,$3,$5}'`
         LAST_COMMIT_AUTHOR=`git log -1 --pretty=format:'%an <%ae>'`
-		if [ ! -z "$HEAD_VERSION_COMMITS" ]; then
+        if [ ! -z "$HEAD_VERSION_COMMITS" ]; then
 			if [ -z "$RPM_VERSION" ]; then
 				#we use last tag + git hash
 				echo "* $LAST_COMMIT_DATE $LAST_COMMIT_AUTHOR - $HEAD_VERSION_TAG"  >> $CHANGES_FILE
-		        git log $TAG_HASH..HEAD --pretty=format:'- %s' 2> /dev/null >> $CHANGES_FILE
+		        git log $TAG_HASH..HEAD --pretty=format:'- %w(72,1,2)%s' 2> /dev/null >> $CHANGES_FILE
 				echo "\n"  >> $CHANGES_FILE
 			else
 				#we use given version
 				echo "* $LAST_COMMIT_DATE $LAST_COMMIT_AUTHOR - $RPM_VERSION"  >> $CHANGES_FILE
-		        git log $TAG_HASH..HEAD --pretty=format:'- %s' 2> /dev/null >> $CHANGES_FILE
+		        git log $TAG_HASH..HEAD --pretty=format:'- %w(72,1,2)%s' 2> /dev/null >> $CHANGES_FILE
 			fi
         fi
   fi
   if [ ! -z "$HIGHER_TAG_HASH" ]; then
 	#tag changes for each tag
-	TAG_COMMIT_DATE=`git log $HIGHER_TAG_HASH -1 --pretty=format:'%ad' | awk '{print $1,$2,$3,$5}'` 
+	TAG_COMMIT_DATE=`git log $HIGHER_TAG_HASH -1 --pretty=format:'%ad' | awk '{print $1,$2,$3,$5}'`
 	TAG_COMMIT_AUTHOR=`git log $HIGHER_TAG_HASH -1 --pretty=format:'%an <%ae>'`
 	if [ ! -z "$HEAD_VERSION_COMMITS" -a "x$HIGHER_TAG" = "x$DEB_VERSION" ]; then
 		:
 	else
 		#we don't repeat highest version 2x
-		echo "* $TAG_COMMIT_DATE $TAG_COMMIT_AUTHOR - $HIGHER_TAG"  >> $CHANGES_FILE 
+		echo "* $TAG_COMMIT_DATE $TAG_COMMIT_AUTHOR - $HIGHER_TAG"  >> $CHANGES_FILE
 	fi
-	git log $TAG_HASH..$HIGHER_TAG_HASH --pretty=format:'- %s'  >> $CHANGES_FILE 
-	echo "\n"  >> $CHANGES_FILE 
+	git log $TAG_HASH..$HIGHER_TAG_HASH --pretty=format:'- %w(72,1,2)%s'  >> $CHANGES_FILE
+	echo "\n"  >> $CHANGES_FILE
   fi
   HIGHER_TAG=$TAG
   HIGHER_TAG_HASH=$TAG_HASH
@@ -111,7 +111,7 @@ done
 if [ `echo "$TAGS" | wc -l` -lt $TAGS_COUNT ]; then
 	BEFORE_FIRST_TAG_COMMITS=`git log $TAG_HASH --pretty=format:'- %s' 2> /dev/null`
 	if [ ! -z "$BEFORE_FIRST_TAG_COMMITS" ]; then
-		TAG_COMMIT_DATE=`git log $TAG_HASH -1 --pretty=format:'%ad' | awk '{print $1,$2,$3,$5}'` 
+		TAG_COMMIT_DATE=`git log $TAG_HASH -1 --pretty=format:'%ad' | awk '{print $1,$2,$3,$5}'`
 		TAG_COMMIT_AUTHOR=`git log $TAG_HASH -1 --pretty=format:'%an <%ae>'`
 		#when there are no tags
 		if [ -z "$TAGS" ]; then
@@ -122,13 +122,13 @@ if [ `echo "$TAGS" | wc -l` -lt $TAGS_COUNT ]; then
 				RPM_VERSION=0.0.0
 			fi
 			echo "* `date +"%a %b %d %Y"` `git config user.name` <`git config user.email`>  - $RPM_VERSION"  >> $CHANGES_FILE
-		else 
-			echo "* $TAG_COMMIT_DATE $TAG_COMMIT_AUTHOR - $TAG"  >> $CHANGES_FILE 
+		else
+			echo "* $TAG_COMMIT_DATE $TAG_COMMIT_AUTHOR - $TAG"  >> $CHANGES_FILE
 		fi
-		git log $TAG_HASH --pretty=format:'- %s'  >> $CHANGES_FILE 
-		echo "\n"  >> $CHANGES_FILE 
+		git log $TAG_HASH --pretty=format:'- %w(72,1,2)%s'  >> $CHANGES_FILE
+		echo "\n"  >> $CHANGES_FILE
 	fi
-fi 
+fi
 #extra line
 if [ ! -z "$APPEND_LINE" ]; then
 	echo $APPEND_LINE  >> $CHANGES_FILE
