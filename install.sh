@@ -7,7 +7,7 @@ MANDIR=/usr/share/man
 
 #root check
 USERID=`id -u`
-[ $USERID -eq "0" ] || { 
+[ $USERID -eq "0" ] || {
     echo "I cannot continue, you should be root or run it with sudo!"
     exit 0
 }
@@ -22,7 +22,12 @@ do
 			echo "syntax error in $TEST, exiting.." 
 			exit 1
 		fi
-done 
+done
+
+#update documentation
+cd doc
+./update_docs.sh
+cd -
 
 mkdir -p -m 0755 $BINDIR
 install -m 0777 -v ./rpmmake  $BINDIR/
@@ -40,7 +45,4 @@ MANPAGES=`find ./doc/manpages -type f`
 install -d -m 755 $MANDIR/man1
 install -m 644 $MANPAGES $MANDIR/man1
 
-DOCS="./README ./LICENSE.LGPL"
-install -d -m 755 $DOCDIR/rpmmake
-install -m 644 $DOCS $DOCDIR/rpmmake
 

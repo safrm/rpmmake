@@ -111,10 +111,16 @@
     </para>
   </refsect1>
 
-  <refsect1><title>AUTHOR</title>
-    Miroslav Šafr &lt;miroslav.safr@gmail.com&gt;
+  <refsect1>
+    <title>AUTHOR</title>
+    <para>
+        Miroslav Šafr &lt;miroslav.safr@gmail.com&gt;
+    </para>
   </refsect1>
-  <refsect1><title>LICENSE</title>
-   LGPL2
+  <refsect1>
+  <title>LICENSE</title>
+      <para>
+       LGPL2
+    </para>       
   </refsect1>
 </refentry>
