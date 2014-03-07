@@ -2,7 +2,6 @@
 #fast script to create rpm package inside the git repo without being root  - http://safrm.net/projects/rpmmake
 #author:  Miroslav Safr <miroslav.safr@gmail.com>
 BINDIR=/usr/bin
-DOCDIR=/usr/share/doc
 MANDIR=/usr/share/man
 
 #root check
@@ -12,9 +11,9 @@ USERID=`id -u`
     exit 0
 }
 
-#automatic version 
-if command -v appver &>/dev/null; then . appver; else APP_SHORT_VERSION=NA ; APP_FULL_VERSION_TAG=NA ; APP_BUILD_DATE=`date +'%Y%m%d_%H%M'`; fi
-
+#automatic version
+if command -v appver 1>/dev/null 2>&1; then . appver; else APP_SHORT_VERSION=NA ; APP_FULL_VERSION_TAG=NA ; APP_BUILD_DATE=`date +'%Y%m%d_%H%M'`; fi
+#test
 for TEST in $(  grep -r -l -h "#\!/bin/sh" --exclude-dir=.git . )
 do
 		sh -n $TEST
@@ -25,9 +24,7 @@ do
 done
 
 #update documentation
-cd doc
-./update_docs.sh
-cd -
+jss-docs-update ./doc 
 
 mkdir -p -m 0755 $BINDIR
 install -m 0777 -v ./rpmmake  $BINDIR/
@@ -44,5 +41,4 @@ install -m 0777 -v ./rpmmake-expect  $BINDIR/
 MANPAGES=`find ./doc/manpages -type f`
 install -d -m 755 $MANDIR/man1
 install -m 644 $MANPAGES $MANDIR/man1
-
 

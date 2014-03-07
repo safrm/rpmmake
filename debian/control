@@ -1,13 +1,14 @@
 Source: rpmmake
-Section: libs
+Section: utils
 Priority: optional
 Maintainer: Miroslav Safr <miroslav.safr@gmail.com>
-Build-Depends: debhelper (>= 5), appver, rpm, xsltproc, docbook-xsl
-Standards-Version: 1.0.0
+Build-Depends: debhelper (>= 5), appver, rpm, jenkins-support-scripts (>=1.2.3)
+Standards-Version: 3.8.1
+Homepage: http://safrm.net/projects/rpmmake
 
 Package: rpmmake
 Architecture: all
-Depends: rpm, tar, expect, ${misc:Depends}
-Description: create rpm package inside the git repo without being root 
-
+Depends: rpm,  expect, ${misc:Depends}
+Description: create rpm package inside the git repo without being root \
+	includes rpm and debian changelog creation scripts from git
 
