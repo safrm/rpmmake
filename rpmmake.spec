@@ -44,6 +44,9 @@ MANPAGES=`find ./doc/manpages -type f`
 install -d -m 755 %{buildroot}%{_mandir}/man1
 install -m 644 $MANPAGES %{buildroot}%{_mandir}/man1
 
+%clean
+rm -fr %{buildroot}
+
 %check
 for TEST in $(  grep -r -l -h "#\!/bin/sh" . )
 do
