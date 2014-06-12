@@ -39,6 +39,9 @@ sed -i".bkp" "1,/^VERSION=/s/^VERSION=.*/VERSION=%{version}/" %{buildroot}/usr/b
 sed -i".bkp" "1,/^VERSION_DATE=/s/^VERSION_DATE=.*/VERSION_DATE=%{APP_BUILD_DATE}/" %{buildroot}/usr/bin/rpmmake-debchangelog && rm -f %{buildroot}/usr/bin/rpmmake-debchangelog.bkp
 install -m 755 ./rpmmake-expect %{buildroot}/usr/bin/
 
+mkdir -p -m 0755 %{buildroot}%{_sysconfdir}/bash_completion.d
+install -m 0777 -v ./rpmmake_completion %{buildroot}%{_sysconfdir}/bash_completion.d
+
 #documentation
 MANPAGES=`find ./doc/manpages -type f`
 install -d -m 755 %{buildroot}%{_mandir}/man1
@@ -63,6 +66,8 @@ done
 %{_bindir}/rpmmake-changelog
 %{_bindir}/rpmmake-debchangelog
 %{_bindir}/rpmmake-expect
+
+%{_sysconfdir}/bash_completion.d/rpmmake_completion
 
 #man pages
 %{_mandir}/man1/rpmmake.1*

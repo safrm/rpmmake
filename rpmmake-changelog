@@ -13,12 +13,12 @@ usage() {
     echo " http://safrm.net/projects/rpmmake/"
     echo "Usage:$RPMMAKE_CHL [OPTIONS] ... [PROJECT_DIR]"
     echo "OPTIONS:"
-    echo "  -b   --basename <my-project> .... project name is taken from argument <my-project> instead of directory name"
-    echo "  -t   --tags <N> ................. amount of last tags to generate changelog from  (default 6)"
-    echo "  -sv  --set-version <version> .... sets latest changelog version"
-    echo "  -a   --append-line <my-message> . appended last line (more info on http..)"
-    echo "  -V   --version .................. prints version of scripts"
-    echo "  -h   --help ..................... prints this help"
+    echo "  -b,   --basename <my-project> .... project name is taken from argument <my-project> instead of directory name"
+    echo "  -t,   --tags <N> ................. amount of last tags to generate changelog from  (default 6)"
+    echo "  -sv,  --set-version <version> .... sets latest changelog version"
+    echo "  -a,   --append-line <my-message> . appended last line (more info on http..)"
+    echo "  -V,   --version .................. prints version of scripts"
+    echo "  -h,   --help ..................... prints this help"
     echo ""
 }
 

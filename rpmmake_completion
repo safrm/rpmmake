@@ -1,0 +1,44 @@
+# rpmmake completion                                        -*- shell-script -*-
+
+_rpmmake()
+{
+    local cur 
+    _init_completion || return
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-b -sv -sr -sp -gn -gk -ns -ne -nv -pp -eo -v -V -h
+            --basename --set-version --set-release --spec-version --gpg-name --gpg-key 
+            --nosign --noexpect --noverify --passphrase --extra-build-options --verbose
+            --version --help' -- "$cur" ) )
+    fi
+
+} &&
+complete -F _rpmmake -o dirnames rpmmake
+
+_rpmmake_changelog()
+{
+    local cur 
+    _init_completion || return
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-b -t -sv -a -V -h
+            --basename --tags --set-version --apend-line --version --help' -- "$cur" ) )
+    fi
+
+} &&
+complete -F _rpmmake_changelog -o dirnames rpmmake-changelog
+
+_rpmmake_changelog()
+{
+    local cur 
+    _init_completion || return
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-b -t -d -sv -a -V -h
+            --basename --tags --distro --set-version --apend-line --version --help' -- "$cur" ) )
+    fi
+
+} &&
+complete -F _rpmmake_debchangelog -o dirnames -o filenames  rpmmake-debchangelog
+
+# ex: ts=4 sw=4 et filetype=sh

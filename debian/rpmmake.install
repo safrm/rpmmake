@@ -3,5 +3,7 @@ rpmmake-changelog /usr/bin/
 rpmmake-debchangelog /usr/bin/
 rpmmake-expect /usr/bin/
 
+rpmmake_completion /etc/bash_completion.d/
+
 doc/manpages/* /usr/share/man/man1/
 
