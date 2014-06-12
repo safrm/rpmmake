@@ -9,6 +9,6 @@ Homepage: http://safrm.net/projects/rpmmake
 Package: rpmmake
 Architecture: all
 Depends: rpm,  expect, ${misc:Depends}
-Description: create rpm package inside the git repo without being root \
-	includes rpm and debian changelog creation scripts from git
+Description: create rpm package inside the git repo without being root and more \
+	including rpm and debian changelog creation scripts from git
 

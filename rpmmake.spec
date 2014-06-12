@@ -18,7 +18,7 @@ BuildRequires:  appver >= 1.1.1
 BuildRequires: jenkins-support-scripts >= 1.2.3
 
 %description
-Fast script to create rpm package inside the git repo without beeing root 
+More than fast script to create rpm package inside the git repo without beeing root 
 
 %prep
 %setup -c -n ./%{name}-%{version}

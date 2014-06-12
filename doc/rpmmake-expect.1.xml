@@ -3,7 +3,7 @@
 <refentry id="rpmmake-expect.1">
 
 <refentryinfo>
-    <title>Fast script to create rpm package inside the git repo without being root</title>
+    <title>More than fast script to create rpm package inside the git repo without being root</title>
     <author>
         <personname><firstname>Miroslav</firstname><surname>Safr</surname></personname>
         <email>miroslav.safr@gmail.com</email>

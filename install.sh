@@ -1,5 +1,5 @@
 #/bin/sh
-#fast script to create rpm package inside the git repo without being root  - http://safrm.net/projects/rpmmake
+#more than fast script to create rpm package inside the git repo without being root  - http://safrm.net/projects/rpmmake
 #author:  Miroslav Safr <miroslav.safr@gmail.com>
 BINDIR=/usr/bin
 COMPLETION_DIR=/etc/bash_completion.d

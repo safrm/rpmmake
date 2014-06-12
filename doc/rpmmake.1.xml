@@ -3,7 +3,7 @@
 <refentry id="rpmmake.1">
 
 <refentryinfo>
-    <title>Fast way to create rpm package inside the git repo without being root</title>
+    <title>More than Fast way to create rpm package inside the git repo without being root</title>
     <author>
         <personname><firstname>Miroslav</firstname><surname>Safr</surname></personname>
         <email>miroslav.safr@gmail.com</email>
@@ -22,7 +22,7 @@
 
 <refnamediv>
     <refname>rpmmake</refname>
-    <refpurpose>Fast way to create rpm package inside the git repo without being root</refpurpose>
+    <refpurpose>More than fast way to create rpm package inside the git repo without being root</refpurpose>
 </refnamediv>
 
 <refsynopsisdiv>

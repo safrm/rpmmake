@@ -1,6 +1,6 @@
 		  GNU LESSER GENERAL PUBLIC LICENSE
 
- rpmmake - fast script to create rpm package inside the git repo without being root 
+ rpmmake - more than fast script to create rpm package inside the git repo without being root 
  Contact:  Miroslav Safr <miroslav.safr@gmail.com>
 
  You may use, distribute and copy the SW under the terms of
