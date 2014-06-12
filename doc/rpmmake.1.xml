@@ -27,7 +27,7 @@
 
 <refsynopsisdiv>
 	<cmdsynopsis>
-        <command>rpmmake [&lt;path_to_project_git_dir&gt;] [OPTIONS]</command>
+        <command>rpmmake [PATH_TO_PROJECT_GIT_DIR] [OPTIONS]</command>
         <arg choice="opt">-b   --basename &lt;my-project&gt;</arg>
         <arg choice="opt">-sv  --set-version &lt;my-version&gt;</arg>
         <arg choice="opt">-sr  --set-release &lt;my-release&gt;</arg>
@@ -174,7 +174,7 @@
     
   </refsect1>
   <refsect1>
-    <title>path_to_project_git_dir</title>
+    <title>PATH_TO_PROJECT_GIT_DIR</title>
     <para>
       Root directory for building.Should have the same name as project and contain project.spec (otherwise -b).
       when it is not specified it takes current directory.
