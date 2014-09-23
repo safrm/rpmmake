@@ -16,6 +16,7 @@ usage() {
     echo "  -b,   --basename <my-project> .... project name is taken from argument <my-project> instead of directory name"
     echo "  -t,   --tags <N> ................. amount of last tags to generate changelog from  (default 6)"
     echo "  -sv,  --set-version <version> .... sets latest changelog version"
+    echo "  -id,  --include-dir <dir-name> ... include only changes only from selected directory"
     echo "  -a,   --append-line <my-message> . appended last line (more info on http..)"
     echo "  -V,   --version .................. prints version of scripts"
     echo "  -h,   --help ..................... prints this help"
@@ -32,20 +33,23 @@ while [ $# -gt 0 ]; do
     -t|--tags) shift
                TAGS_COUNT=$1
                ;;
-    -a | --append-line) shift
-	                APPEND_LINE=$1
-                        ;;
+    -a|--append-line) shift
+	           APPEND_LINE=$1
+               ;;
     -sv|--set-version) shift
                RPM_VERSION=$1           #custom version
 			   ;;
-    -V | --version)    echo "$RPMMAKE_CHL  ${VERSION} ${VERSION_DATE}"
-                  exit 0
-                  ;;
-    -h | --help ) usage
-              exit 0
-              ;;
-	* )       PWD_DIR=$PWD; cd $1   #from different directory
-		  ;;
+	-id|--include-dir) shift
+               INCLUDED_DIRS="$1 $INCLUDED_DIRS"
+			   ;;
+    -V|--version)    echo "$RPMMAKE_CHL  ${VERSION} ${VERSION_DATE}"
+               exit 0
+               ;;
+    -h|--help) usage
+               exit 0
+               ;;
+	*)         PWD_DIR=$PWD; cd $1   #from different directory
+		       ;;
   esac
   shift
 done
@@ -81,12 +85,12 @@ do
 			if [ -z "$RPM_VERSION" ]; then
 				#we use last tag + git hash
 				echo "* $LAST_COMMIT_DATE $LAST_COMMIT_AUTHOR - $HEAD_VERSION_TAG"  >> $CHANGES_FILE
-		        git log $TAG_HASH..HEAD --pretty=format:'- %w(72,1,2)%s' 2> /dev/null >> $CHANGES_FILE
+		        git log $TAG_HASH..HEAD --pretty=format:'- %w(72,1,2)%s' $INCLUDED_DIRS 2> /dev/null >> $CHANGES_FILE
 				echo "\n"  >> $CHANGES_FILE
 			else
 				#we use given version
 				echo "* $LAST_COMMIT_DATE $LAST_COMMIT_AUTHOR - $RPM_VERSION"  >> $CHANGES_FILE
-		        git log $TAG_HASH..HEAD --pretty=format:'- %w(72,1,2)%s' 2> /dev/null >> $CHANGES_FILE
+		        git log $TAG_HASH..HEAD --pretty=format:'- %w(72,1,2)%s' $INCLUDED_DIRS 2> /dev/null >> $CHANGES_FILE
 			fi
         fi
   fi
@@ -100,7 +104,7 @@ do
 		#we don't repeat highest version 2x
 		echo "* $TAG_COMMIT_DATE $TAG_COMMIT_AUTHOR - $HIGHER_TAG"  >> $CHANGES_FILE
 	fi
-	git log $TAG_HASH..$HIGHER_TAG_HASH --pretty=format:'- %w(72,1,2)%s'  >> $CHANGES_FILE
+	git log $TAG_HASH..$HIGHER_TAG_HASH --pretty=format:'- %w(72,1,2)%s' $INCLUDED_DIRS >> $CHANGES_FILE
 	echo "\n"  >> $CHANGES_FILE
   fi
   HIGHER_TAG=$TAG
@@ -125,7 +129,7 @@ if [ `echo "$TAGS" | wc -l` -lt $TAGS_COUNT ]; then
 		else
 			echo "* $TAG_COMMIT_DATE $TAG_COMMIT_AUTHOR - $TAG"  >> $CHANGES_FILE
 		fi
-		git log $TAG_HASH --pretty=format:'- %w(72,1,2)%s'  >> $CHANGES_FILE
+		git log $TAG_HASH --pretty=format:'- %w(72,1,2)%s' $INCLUDED_DIRS >> $CHANGES_FILE
 		echo "\n"  >> $CHANGES_FILE
 	fi
 fi

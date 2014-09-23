@@ -31,6 +31,7 @@
         <arg choice="opt">-b   --basename &lt;my-project&gt;</arg>
         <arg choice="opt">-t   --tags &lt;N&gt;</arg>
         <arg choice="opt">-sv  --set-version &lt;my-version&gt;</arg>
+        <arg choice="opt">-id  --include-dir &lt;dir-name&gt;</arg>
         <arg choice="opt">-a   --append-line &lt;my-message&gt;</arg>
         <arg choice="opt">-V   --version</arg>
         <arg choice="opt">-h   --help</arg>
@@ -67,6 +68,15 @@
         <listitem>
           <para>
             Project version is taken from argument &lt;my-version&gt; instead of git tag.
+          </para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry><term>-id  --include-dir &lt;dir-name&gt;</term>
+        <listitem>
+          <para>
+            Include only changes from selected directory. 
+			It can be used for filtering out the type of changes ( -id ./src) or for sub-components which are in the same git repo ( -id ./my-client ).
           </para>
         </listitem>
       </varlistentry>

@@ -28,14 +28,14 @@ _rpmmake_changelog()
 } &&
 complete -F _rpmmake_changelog -o dirnames rpmmake-changelog
 
-_rpmmake_changelog()
+_rpmmake_debchangelog()
 {
     local cur 
     _init_completion || return
 
     if [[ "$cur" == -* ]]; then
-        COMPREPLY=( $( compgen -W '-b -t -d -sv -a -V -h
-            --basename --tags --distro --set-version --apend-line --version --help' -- "$cur" ) )
+        COMPREPLY=( $( compgen -W '-b -t -d -sv -id -a -V -h 
+            --basename --tags --distro --set-version --include-dir --apend-line --version --help' -- "$cur" ) )
     fi
 
 } &&
