@@ -24,7 +24,7 @@ usage() {
     echo "  -sr,  --set-release <my-release> . project release is taken from argument <my-release> instead of spec file"
     echo "  -sp,  --spec-version ............. prefer version from spec file over git tag"
     echo "  -gn,  --gpg-name <gpg-name> ...... set custom gpg name for signing by name"
-    echo "  -gk,  --gpg-key <gpg-key> ........ set custom gpg name for signing by key"                
+    echo "  -gk,  --gpg-key <gpg-key> ........ set custom gpg key for signing by key"                
     echo "  -ns,  --nosign ................... do not sign the package"
     echo "  -ne,  --noexpect ................. do not use expect to enter passphrase"
     echo "  -nv,  --noverify ................. do not run package verification"

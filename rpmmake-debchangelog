@@ -70,7 +70,8 @@ TAGS_COUNT=$(($TAGS_COUNT+1))
 TAGS=`git tag | sort -V -u -r | head -$TAGS_COUNT`
 
 if [ -z "$DISTRO" ]; then
-	DISTRO=`cat /etc/*-release | grep DISTRIB_CODENAME | awk -F '=' {' print $2'}`
+#	DISTRO=`cat /etc/*-release | grep DISTRIB_CODENAME | awk -F '=' {' print $2'}`
+	DISTRO=$( lsb_release -sc )
 fi
 if [ -z "$DISTRO" ]; then
 	echo "distroseries not detected using unstable"
