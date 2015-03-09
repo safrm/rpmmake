@@ -24,7 +24,7 @@ usage() {
     echo "  -sr,  --set-release <my-release> . project release is taken from argument <my-release> instead of spec file"
     echo "  -sp,  --spec-version ............. prefer version from spec file over git tag"
     echo "  -gn,  --gpg-name <gpg-name> ...... set custom gpg name for signing by name"
-    echo "  -gk,  --gpg-key <gpg-key> ........ set custom gpg key for signing by key"                
+    echo "  -gk,  --gpg-key <gpg-key> ........ set custom gpg key for signing by key"
     echo "  -ns,  --nosign ................... do not sign the package"
     echo "  -ne,  --noexpect ................. do not use expect to enter passphrase"
     echo "  -nv,  --noverify ................. do not run package verification"
@@ -81,36 +81,33 @@ while [ $# -gt 0 ]; do
               ;;
     -V | --version) echo "$RPMMAKE ${VERSION} ${VERSION_DATE}"
               exit 0
-              ;;  
-    -h | --help ) usage 
+              ;;
+    -h | --help ) usage
               exit 0
-              ;; 
+              ;;
 	* )       ORIG_PWD_DIR=`pwd`; cd $1   #from different directory
-		      ;; 
+		      ;;
   esac
   shift
 done
 
-#basename from 
+#basename from
 PWD=`pwd`
 BASENAME=`basename "$PWD"`
 [ "x$CUSTOM_BASENAME" != "x" ] && BASENAME=$CUSTOM_BASENAME
-if [ ! -f $BASENAME.spec ]
-then
+if [ ! -f $BASENAME.spec ]; then
     echo "File $PWD/$BASENAME.spec does not exists" 
     exit 1
 fi
 
 #version autodetection from git if not set by args
-if [ "x$RPM_VERSION" = "x" ]
-then
+if [ "x$RPM_VERSION" = "x" ]; then
     RPM_VERSION=`git describe --abbrev=0 2> /dev/null`
     if [ $USE_VERSION_FROM_SPEC -eq 1 ] || [ "x$RPM_VERSION" = "x" ]; then
 	RPM_VERSION=`cat  $BASENAME.spec  |grep -E "^Version:" | awk -F " " '{print $2}'`
     fi
 fi
-if [ "x$RPM_VERSION" = "x" ]
-then
+if [ "x$RPM_VERSION" = "x" ]; then
     echo "error: version not detected"
     exit 1
 fi
@@ -178,9 +175,9 @@ cd $PWD
 
 #signing
 if [ $SIGN -eq 1 ]; then
-	if [ -z "$GPG_NAME" ]; then 
+	if [ -z "$GPG_NAME" ]; then
 		GPG_NAME=`gpg --list-keys | grep "$GPGKEY" -1 | grep uid | sed "s/uid *//"`
-		echo "using default(first) gpg key $GPGKEY"; 
+		echo "using default(first) gpg key $GPGKEY";
 	fi
 	PACKAGES=`find $PWD/rpm -type f -printf '%p\n' | grep -i -E -Z '\.(rpm)$'`
 	echo "${PACKAGES}" | \
@@ -204,17 +201,15 @@ if [ $SIGN -eq 1 ]; then
 fi
 
 #verification
-if [ $VERIFY = 1 ] 
-then
+if [ $VERIFY = 1 ]; then
     #to not have them 2x
     PACKAGES=`find $PWD/rpm -type f -name "*.rpm" -not -name "*.src.rpm"`
     for PACKAGE in $PACKAGES ; do
 
         rpm -qip $PACKAGE
-        if [ $? != 0 ] 
-        then
+        if [ $? != 0 ]; then
             echo "problem with $PACKAGE exiting...";
-            exit 1;
+            exit 1
         fi
     done || exit 1
 fi
