@@ -1,0 +1,73 @@
+<p>name: rpmmake
+author:  Miroslav Safr <a href="&#x6D;&#x61;&#105;&#108;&#x74;&#x6F;:&#x6D;&#x69;&#x72;&#x6F;&#115;&#108;&#97;&#118;&#x2E;s&#x61;&#102;&#x72;&#64;&#103;m&#x61;&#105;&#x6C;&#46;&#x63;&#x6F;&#x6D;">&#x6D;&#x69;&#x72;&#x6F;&#115;&#108;&#97;&#118;&#x2E;s&#x61;&#102;&#x72;&#64;&#103;m&#x61;&#105;&#x6C;&#46;&#x63;&#x6F;&#x6D;</a>
+web: http://safrm.net/projects/rpmmake
+     https://github.com/safrm/rpmmake
+description: more than fast script to create rpm package inside the git repo without being root </p>
+
+<p>content: 
+ rpmmake  ................ main linux bash script
+ rpmmake-changelog ....... generates rpm changelog (<my-project>.changes file) from git log
+ rpmmake-debchangelog .... generates debian changelog (debian/changelog file) from git log
+ rpmmake-expect .......... expect wrapper for signing passphrase 
+ install.sh .............. executes installation to /urs/bin directory</p>
+
+<p>usage1:
+<my-project>$ rpmmake  ................... builds rpms from <my-project>/<my-project>.spec in <my-project>/rpm rootdir
+                                           requires <my-project>/<my-project>.spec and tags as x.y.z
+usage2:
+rpmmake  /<my-path>/<my-project> ......... builds rpms from /<my-path>/<my-project>/<my-project>.spec in /<my-path>/<my-project>/rpm rootdir</p>
+
+<p>usage3: 
+<some-other-name>$ rpmmake -b <my-project> ...... project name is taken from argument <my-project> instead of directory name
+                                                  this is important for Hudson/Jenkins slaves because they are using own sub-directorical structure
+usage4: generate changelogs rpm/deb
+./rpmmake-changelog 
+first tag: 1.0.4 - e43218284cff9c6c9e69dd17e145805604ecbf66
+rpm changelog for 7 tags updated in ./rpmmake.changes</p>
+
+<p>./rpmmake-debchangelog 
+first tag: 1.1.5 - 5bd69b366a3afaf0c2a8b068cf1eed24df1742ea
+debian changelog for 7 tags updated in ./debian/changelog</p>
+
+<p>usage5: generate changelogs for sub-dir/component
+./rpmmake-changelog -id ./my-component</p>
+
+<h1>check changelog form package</h1>
+
+<p>rpm -qp --changelog ./rpmmake-1.0.5-1.noarch.rpm 
+* Wed May 16 2012 safrrmir-ul000590 <a href="m&#97;&#x69;&#x6C;t&#x6F;:&#x6D;&#x69;&#x72;&#x6F;&#x73;&#x6C;&#97;&#x76;&#x2E;&#x73;&#x61;&#x66;&#114;&#64;&#x67;&#x6D;&#97;&#x69;&#108;.&#99;&#x6F;&#x6D;">&#x6D;&#x69;&#x72;&#x6F;&#x73;&#x6C;&#97;&#x76;&#x2E;&#x73;&#x61;&#x66;&#114;&#64;&#x67;&#x6D;&#97;&#x69;&#108;.&#99;&#x6F;&#x6D;</a> - 1.0.5
+- New: changelog scripts added to installation
+- Changes: rpmmake-debchangelog generated right debian/changelog format
+- Fix: rpm changelog tag author New: debian changelog script rpmmake-debchangelog
+- New: Added commits before first tag Changes: default 6 tags, changes file name unified
+....</p>
+
+<p>./rpmmake-debchangelog 
+first tag: 1.0.4 - e43218284cff9c6c9e69dd17e145805604ecbf66
+debian changelog for 7 tags updated in ./debian/changelog</p>
+
+<h1>check changelog form package</h1>
+
+<p>apt-listchanges ./rpmmake<em>1.0.5</em>all.deb
+or 
+ar p ./s-scripts<em>1.0.0</em>all.deb data.tar.gz | tar zx --wildcards "<em>/changelog.gz" -O | zcat
+or
+deblog () { ar p $</em> data.tar.gz | tar zx --wildcards "*/changelog.gz" -O | zcat; }
+deblog ./s-scripts<em>1.0.0</em>all.deb
+...</p>
+
+<p>install ubuntu:
+  1. add release key
+    wget -O - http://safrm.net/releases/Release.key | sudo apt-key add -
+  2. get package
+    wget http://safrm.net/releases/rpmmake/rpmmake<em>1.0.15</em>all.deb
+  3.install package
+    sudo dpkg -i ./rpmmake<em>1.0.15-1</em>all.deb</p>
+
+<p>install fedora/RHEL:
+  1. add release key
+    sudo rpm --import http://safrm.net/releases/Release.key
+  2. get package
+    wget http://safrm.net/releases/rpmmake/rpmmake-1.0.15-1.noarch.rpm
+  3.install package
+    sudo rpm -i ./rpmmake-1.0.15-1.noarch.rpm</p>

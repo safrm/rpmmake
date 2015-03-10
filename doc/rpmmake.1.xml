@@ -39,6 +39,7 @@
         <arg choice="opt">-nv  --noverify</arg>
         <arg choice="opt">-pp  --passphrase &lt;passphrase&gt;</arg>
         <arg choice="opt">-eo  --extra-build-options &lt;opt&gt;</arg>
+        <arg choice="opt">-id  --include-dir &lt;dir-name&gt;</arg>
         <arg choice="opt">-v   --verbose</arg>
         <arg choice="opt">-V   --version</arg>
         <arg choice="opt">-h   --help</arg>
@@ -147,6 +148,15 @@
         </listitem>
       </varlistentry>
       
+      <varlistentry><term>-id  --include-dir &lt;dir-name&gt;</term>
+        <listitem>
+          <para>
+            Include only changes from selected directory. 
+			It can be used for filtering out the type of changes ( -id ./src) or for sub-components which are in the same git repo ( -id ./my-client ).
+          </para>
+        </listitem>
+      </varlistentry>
+
       <varlistentry><term>-v   --verbose</term>
         <listitem>
           <para>
