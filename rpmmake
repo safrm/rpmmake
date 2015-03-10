@@ -30,6 +30,7 @@ usage() {
     echo "  -nv,  --noverify ................. do not run package verification"
     echo "  -pp,  --passphrase <passphrase> .. pass passphrase or use export PASSPHRASE=<pp>"
     echo "  -eo,  --extra-build-options <opt>  pass extra build options to rpmbuild"
+    echo "  -id,  --include-dir <dir-name> ... include only changes from selected directory"
     echo "  -v,   --verbose .................. prints more output"
     echo "  -V,   --version .................. prints version of scripts"
     echo "  -h,   --help ..................... prints this help"
@@ -76,6 +77,9 @@ while [ $# -gt 0 ]; do
     -eo | --extra-build-options) shift
               EXTRA_BUILD_OPTIONS="$EXTRA_BUILD_OPTIONS $1"
               ;;
+	-id|--include-dir) shift 
+               INCLUDED_DIRS="$1 $INCLUDED_DIRS"
+			   ;;
     -v | --verbose)
 		      VERBOSE="--verbose"
               ;;
@@ -131,7 +135,10 @@ if [ $? -ne 0 ]; then
   #use changelog from edited file 
   if [ ! -e ./$BASENAME.changes ]; then
     #or generate changelog automatically from git
-    rpmmake-changelog -b $BASENAME -sv $RPM_VERSION
+    if [ -n "$INCLUDED_DIRS" ]; then
+        INCLUDEDIR_FLAG="-id $INCLUDED_DIRS"
+    fi
+    rpmmake-changelog -b $BASENAME -sv $RPM_VERSION $INCLUDEDIR_FLAG
   fi
   cat ./$BASENAME.changes >> rpm/SOURCES/$BASENAME-$RPM_VERSION.spec
 fi
