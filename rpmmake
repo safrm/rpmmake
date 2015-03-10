@@ -1,8 +1,8 @@
 #!/bin/sh
-#rpmmake - more than fast way to create rpm package inside the git repo without being root - http://safrm.net/projects/rpmmake  
+#rpmmake - more than fast way to create rpm package inside the git repo without being root - http://safrm.net/projects/rpmmake
 #author: Miroslav Safr <miroslav.safr@gmail.com>
 #
-#usage1: <my-project>$ rpmmake  ................... builds rpms from <my-project>/<my-project>.spec in <my-project>/rpm rootdir 
+#usage1: <my-project>$ rpmmake  ................... builds rpms from <my-project>/<my-project>.spec in <my-project>/rpm rootdir
 #                                                   requires <my-project>/<my-project>.spec and tags as x.y.z
 #usage2: rpmmake  /<my-path>/<my-project> ......... builds rpms from /<my-path>/<my-project>/<my-project>.spec in /<my-path>/<my-project>/rpm rootdir
 #usage3: <some-other-name>$ rpmmake -b <my-project> ...... project name is taken from argument <my-project> instead of directory name
@@ -41,58 +41,43 @@ EXPECT=1
 USE_VERSION_FROM_SPEC=0
 
 while [ $# -gt 0 ]; do
-  case "$1" in
-    -b|--basename) shift
-               CUSTOM_BASENAME=$1    #clone directory has different name than project
-               ;;
-    -sp|--spec-version)
-		USE_VERSION_FROM_SPEC=1
-		;;
-    -sv|--set-version) shift
-               RPM_VERSION=$1           #custom version
-               ;;
-    -sr|--set-release) shift
-               RPM_RELEASE=$1           #custom release
-               ;;
-    -ns|--nosign)
-               SIGN=0
-               ;;
-    -gn|--gpg-name) shift
-		GPG_NAME=$1
-		;;
-    -gk|--gpg-key) shift
-		GPGKEY=$1
-		GPG_NAME=`gpg --list-keys | grep "$GPGKEY" -1 | grep uid | sed "s/uid *//"`
-		if [ -z "$GPG_NAME" ]; then echo "wrong gpg key $GPGKEY"; exit 1; fi
-		;;
-    -nv|--noverify)
-               VERIFY=0
-               ;;
-    -ne|--noexpect)
-               EXPECT=0
-               ;;
-    -pp | --passphrase) shift
-              export PASSPHRASE=$1
-               ;;
-    -eo | --extra-build-options) shift
-              EXTRA_BUILD_OPTIONS="$EXTRA_BUILD_OPTIONS $1"
-              ;;
-	-id|--include-dir) shift 
-               INCLUDED_DIRS="$1 $INCLUDED_DIRS"
-			   ;;
-    -v | --verbose)
-		      VERBOSE="--verbose"
-              ;;
-    -V | --version) echo "$RPMMAKE ${VERSION} ${VERSION_DATE}"
-              exit 0
-              ;;
-    -h | --help ) usage
-              exit 0
-              ;;
-	* )       ORIG_PWD_DIR=`pwd`; cd $1   #from different directory
-		      ;;
-  esac
-  shift
+    case "$1" in
+        -b|--basename) shift ; CUSTOM_BASENAME=$1  #clone directory has different name than project
+        ;;
+        -sp|--spec-version) USE_VERSION_FROM_SPEC=1
+        ;;
+        -sv|--set-version) shift ; RPM_VERSION=$1  #custom version
+        ;;
+        -sr|--set-release) shift ; RPM_RELEASE=$1  #custom release
+        ;;
+        -ns|--nosign) SIGN=0
+        ;;
+        -gn|--gpg-name) shift ; GPG_NAME=$1
+        ;;
+        -gk|--gpg-key) shift ;  GPGKEY=$1
+            GPG_NAME=`gpg --list-keys | grep "$GPGKEY" -1 | grep uid | sed "s/uid *//"`
+            if [ -z "$GPG_NAME" ]; then echo "wrong gpg key $GPGKEY"; exit 1; fi
+        ;;
+        -nv|--noverify) VERIFY=0
+        ;;
+        -ne|--noexpect) EXPECT=0
+        ;;
+        -pp|--passphrase) shift ; export PASSPHRASE=$1
+        ;;
+        -eo|--extra-build-options) shift ; EXTRA_BUILD_OPTIONS="$EXTRA_BUILD_OPTIONS $1"
+        ;;
+        -id|--include-dir) shift ; INCLUDED_DIRS="$1 $INCLUDED_DIRS"
+        ;;
+        -v|--verbose) VERBOSE="--verbose"
+        ;;
+        -V|--version) echo "$RPMMAKE ${VERSION} ${VERSION_DATE}" ; exit 0
+        ;;
+        -h|--help ) usage ; exit 0
+        ;;
+        *) ORIG_PWD_DIR=`pwd`; cd $1   #from different directory
+        ;;
+    esac
+    shift
 done
 
 #basename from
@@ -100,18 +85,18 @@ PWD=`pwd`
 BASENAME=`basename "$PWD"`
 [ "x$CUSTOM_BASENAME" != "x" ] && BASENAME=$CUSTOM_BASENAME
 if [ ! -f $BASENAME.spec ]; then
-    echo "File $PWD/$BASENAME.spec does not exists" 
+    echo "File $PWD/$BASENAME.spec does not exists"
     exit 1
 fi
 
 #version autodetection from git if not set by args
-if [ "x$RPM_VERSION" = "x" ]; then
+if [ -z "$RPM_VERSION" ]; then
     RPM_VERSION=`git describe --abbrev=0 2> /dev/null`
     if [ $USE_VERSION_FROM_SPEC -eq 1 ] || [ "x$RPM_VERSION" = "x" ]; then
-	RPM_VERSION=`cat  $BASENAME.spec  |grep -E "^Version:" | awk -F " " '{print $2}'`
+        RPM_VERSION=`cat  $BASENAME.spec  |grep -E "^Version:" | awk -F " " '{print $2}'`
     fi
 fi
-if [ "x$RPM_VERSION" = "x" ]; then
+if [ -z "$RPM_VERSION" ]; then
     echo "error: version not detected"
     exit 1
 fi
@@ -125,22 +110,22 @@ mkdir -p -m 0777 rpm/SOURCES rpm/BUILD rpm/SRPMS rpm/RPMS/i386 rpm/RPMS/`uname -
 sed  "s/^Version:.*/Version:    ${RPM_VERSION}/" ./$BASENAME.spec > rpm/SOURCES/$BASENAME-$RPM_VERSION.spec
 
 #update release in spec from args
-if [ "x$RPM_RELEASE" != "x" ]; then
-	sed -i".bkp" "s/^Release:.*/Release:     ${RPM_RELEASE}/" rpm/SOURCES/$BASENAME-$RPM_VERSION.spec && rm -f rpm/SOURCES/$BASENAME-$RPM_VERSION.spec.bkp
+if [ -n "$RPM_RELEASE" ]; then
+    sed -i".bkp" "s/^Release:.*/Release:     ${RPM_RELEASE}/" rpm/SOURCES/$BASENAME-$RPM_VERSION.spec && rm -f rpm/SOURCES/$BASENAME-$RPM_VERSION.spec.bkp
 fi
 
 #if there exist changelog section in spec file we don't overwrite it
 RESULT=`grep -qE "%changelog" $BASENAME.spec 2> /dev/null `
 if [ $? -ne 0 ]; then
-  #use changelog from edited file 
-  if [ ! -e ./$BASENAME.changes ]; then
-    #or generate changelog automatically from git
-    if [ -n "$INCLUDED_DIRS" ]; then
-        INCLUDEDIR_FLAG="-id $INCLUDED_DIRS"
+    #use changelog from edited file
+    if [ ! -e ./$BASENAME.changes ]; then
+        #or generate changelog automatically from git
+        if [ -n "$INCLUDED_DIRS" ]; then
+            INCLUDEDIR_FLAG="-id $INCLUDED_DIRS"
+        fi
+        rpmmake-changelog -b $BASENAME -sv $RPM_VERSION $INCLUDEDIR_FLAG
     fi
-    rpmmake-changelog -b $BASENAME -sv $RPM_VERSION $INCLUDEDIR_FLAG
-  fi
-  cat ./$BASENAME.changes >> rpm/SOURCES/$BASENAME-$RPM_VERSION.spec
+    cat ./$BASENAME.changes >> rpm/SOURCES/$BASENAME-$RPM_VERSION.spec
 fi
 
 #update release no automaticaly
@@ -156,17 +141,17 @@ fi
 TAR_MIN_VERSION=`tar --version | head -1 |  awk -F"[ .]" ' { print   $5 }'`
 if [ $TAR_MIN_VERSION -lt 21 ]
 then
-  echo "old tar $TAR_MIN_VERSION "
-  tar --exclude=.gitignore --exclude=.git --exclude=build --exclude=debian --exclude=*.tar.bz2 --exclude=rpm $VERBOSE -cjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
+    echo "old tar $TAR_MIN_VERSION "
+    tar --exclude=.gitignore --exclude=.git --exclude=build --exclude=debian --exclude=*.tar.bz2 --exclude=rpm $VERBOSE -cjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
 else
-  echo "new tar $TAR_MIN_VERSION "
-  tar --exclude-vcs --exclude=build --exclude=debian --exclude=*.tar.bz2 --exclude=rpm $VERBOSE -cjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
+    echo "new tar $TAR_MIN_VERSION "
+    tar --exclude-vcs --exclude=build --exclude=debian --exclude=*.tar.bz2 --exclude=rpm $VERBOSE -cjf rpm/SOURCES/$BASENAME-$RPM_VERSION.tar.bz2  ./
 fi
 echo "tar ball OK"
 
 if [ ! -z "$GPG_NAME" ]; then
-#	GPG_NAME_ARG="--define=_gpg_name '$GPG_NAME' --define=_signature gpg"
-	echo "using gpg_name $GPG_NAME"
+    #	GPG_NAME_ARG="--define=_gpg_name '$GPG_NAME' --define=_signature gpg"
+    echo "using gpg_name $GPG_NAME"
 fi
 
 #default sign from ~/.rpmmacros
@@ -175,44 +160,44 @@ fi
 
 rpmbuild -ba ./rpm/SOURCES/$BASENAME-$RPM_VERSION.spec --define="_topdir $PWD/rpm" $VERBOSE $EXTRA_BUILD_OPTIONS
 if [ $? != 0 ]; then
-   echo "rpmbuild failed, exiting..."
-   exit 1
+    echo "rpmbuild failed, exiting..."
+    exit 1
 fi
 cd $PWD
 
 #signing
 if [ $SIGN -eq 1 ]; then
-	if [ -z "$GPG_NAME" ]; then
-		GPG_NAME=`gpg --list-keys | grep "$GPGKEY" -1 | grep uid | sed "s/uid *//"`
-		echo "using default(first) gpg key $GPGKEY";
-	fi
-	PACKAGES=`find $PWD/rpm -type f -printf '%p\n' | grep -i -E -Z '\.(rpm)$'`
-	echo "${PACKAGES}" | \
-	{ while IFS='\n' read -r ENTRY ;
-	do
-		echo "signing> $SIGN_NAME KEY:$GPGKEY FILE:$ENTRY"
-		if [ $EXPECT -eq 1 ]; then
-			rpmmake-expect rpm --addsign $VERBOSE -D "_signature gpg" -D "_gpg_name $GPG_NAME"  "$ENTRY"
-		else
-			rpm --addsign $VERBOSE -D "_signature gpg" -D "_gpg_name $GPG_NAME" "$ENTRY"
-		fi
-        rpm --checksig $VERBOSE "$ENTRY"
-        if [ $? != 0 ]; then
-            echo "Signing rpms failed! "
-            echo "  Maybe the key:$GPGKEY is not imported in rpm database:"
-            echo "  gpg --export -a $GPGKEY > key.asc && rpm --import key.asc"
-            exit 1
-        fi
-	done
-	} || exit 1
+    if [ -z "$GPG_NAME" ]; then
+        GPG_NAME=`gpg --list-keys | grep "$GPGKEY" -1 | grep uid | sed "s/uid *//"`
+        echo "using default(first) gpg key $GPGKEY";
+    fi
+    PACKAGES=`find $PWD/rpm -type f -printf '%p\n' | grep -i -E -Z '\.(rpm)$'`
+    echo "${PACKAGES}" | \
+    { while IFS='\n' read -r ENTRY ;
+        do
+            echo "signing> $SIGN_NAME KEY:$GPGKEY FILE:$ENTRY"
+            if [ $EXPECT -eq 1 ]; then
+                rpmmake-expect rpm --addsign $VERBOSE -D "_signature gpg" -D "_gpg_name $GPG_NAME"  "$ENTRY"
+            else
+                rpm --addsign $VERBOSE -D "_signature gpg" -D "_gpg_name $GPG_NAME" "$ENTRY"
+            fi
+            rpm --checksig $VERBOSE "$ENTRY"
+            if [ $? != 0 ]; then
+                echo "Signing rpms failed! "
+                echo "  Maybe the key:$GPGKEY is not imported in rpm database:"
+                echo "  gpg --export -a $GPGKEY > key.asc && rpm --import key.asc"
+                exit 1
+            fi
+        done
+    } || exit 1
 fi
 
 #verification
-if [ $VERIFY = 1 ]; then
+if [ $VERIFY -eq 1 ]; then
     #to not have them 2x
     PACKAGES=`find $PWD/rpm -type f -name "*.rpm" -not -name "*.src.rpm"`
     for PACKAGE in $PACKAGES ; do
-
+        
         rpm -qip $PACKAGE
         if [ $? != 0 ]; then
             echo "problem with $PACKAGE exiting...";
