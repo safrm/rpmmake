@@ -74,10 +74,11 @@ do
         HEAD_VERSION_TAG=`git describe --tags  --dirty=* 2> /dev/null`
         LAST_COMMIT_DATE=`git log -1 --pretty=format:'%ad' | awk '{print $1,$2,$3,$5}'`
         LAST_COMMIT_AUTHOR=`git log -1 --pretty=format:'%an <%ae>'`
-        if [ ! -z "$HEAD_VERSION_COMMITS" ]; then
+        if [ -n "$HEAD_VERSION_COMMITS" ]; then
             if [ -z "$RPM_VERSION" ]; then
                 #we use last tag + git hash
-                echo "* $LAST_COMMIT_DATE $LAST_COMMIT_AUTHOR - $HEAD_VERSION_TAG"  >> $CHANGES_FILE
+                RPM_HEAD_VERSION_TAG=$( echo "$HEAD_VERSION_TAG" | sed 's/[-+~]/_/g' )
+                echo "* $LAST_COMMIT_DATE $LAST_COMMIT_AUTHOR - $RPM_HEAD_VERSION_TAG"  >> $CHANGES_FILE
                 git log $TAG_HASH..HEAD --pretty=format:'- %w(72,1,2)%s' $INCLUDED_DIRS 2> /dev/null >> $CHANGES_FILE
                 echo "\n"  >> $CHANGES_FILE
             else
@@ -95,7 +96,8 @@ do
             :
         else
             #we don't repeat highest version 2x
-            echo "* $TAG_COMMIT_DATE $TAG_COMMIT_AUTHOR - $HIGHER_TAG"  >> $CHANGES_FILE
+            RPM_HIGHER_TAG=$( echo "$HIGHER_TAG" | sed 's/[-+~]/_/g' )
+            echo "* $TAG_COMMIT_DATE $TAG_COMMIT_AUTHOR - $RPM_HIGHER_TAG"  >> $CHANGES_FILE
         fi
         git log $TAG_HASH..$HIGHER_TAG_HASH --pretty=format:'- %w(72,1,2)%s' $INCLUDED_DIRS >> $CHANGES_FILE
         echo "\n"  >> $CHANGES_FILE
@@ -118,9 +120,11 @@ if [ `echo "$TAGS" | wc -l` -lt $TAGS_COUNT ]; then
             if [ -z "$RPM_VERSION" ]; then
                 RPM_VERSION=0.0.0
             fi
-            echo "* `date +"%a %b %d %Y"` `git config user.name` <`git config user.email`>  - $RPM_VERSION"  >> $CHANGES_FILE
+            RPM_RPM_VERSION=$( echo "$RPM_VERSION" | sed 's/[-+~]/_/g' )
+            echo "* `date +"%a %b %d %Y"` `git config user.name` <`git config user.email`>  - $RPM_RPM_VERSION"  >> $CHANGES_FILE
         else
-            echo "* $TAG_COMMIT_DATE $TAG_COMMIT_AUTHOR - $TAG"  >> $CHANGES_FILE
+            RPM_TAG=$( echo "$TAG" | sed 's/[-+~]/_/g' )
+            echo "* $TAG_COMMIT_DATE $TAG_COMMIT_AUTHOR - $RPM_TAG"  >> $CHANGES_FILE
         fi
         git log $TAG_HASH --pretty=format:'- %w(72,1,2)%s' $INCLUDED_DIRS >> $CHANGES_FILE
         echo "\n"  >> $CHANGES_FILE

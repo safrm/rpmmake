@@ -91,7 +91,7 @@ fi
 
 #version autodetection from git if not set by args
 if [ -z "$RPM_VERSION" ]; then
-    RPM_VERSION=`git describe --abbrev=0 2> /dev/null`
+    RPM_VERSION=`git describe --abbrev=0 2> /dev/null | sed 's/[-+~]/_/g'`
     if [ $USE_VERSION_FROM_SPEC -eq 1 ] || [ "x$RPM_VERSION" = "x" ]; then
         RPM_VERSION=`cat  $BASENAME.spec  |grep -E "^Version:" | awk -F " " '{print $2}'`
     fi
